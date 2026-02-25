@@ -16,92 +16,48 @@
             --success: #059669; --border: #e2e8f0; --label: #64748b; --accent: #dbeafe;
             --danger: #dc2626;
         }
-
         body.dark-mode {
             --bg: #020617; --card: #1e293b; --text: #f8fafc; --primary: #60a5fa;
             --success: #10b981; --border: #334155; --label: #94a3b8; --accent: #1e293b;
             --danger: #ef4444;
         }
-
         * { box-sizing: border-box; transition: all 0.2s ease; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
-
         .app-container { width: 100%; max-width: 900px; background: var(--card); padding: 40px; border-radius: 24px; box-shadow: 0 20px 50px rgba(0,0,0,0.1); margin: 20px 0; }
-        
         .header { text-align: center; margin-bottom: 35px; }
-        h1 { font-size: 1.8rem; color: var(--primary); margin: 0; letter-spacing: -0.5px; line-height: 1.2; font-weight: 800; }
-        .subtitle { font-size: 0.85rem; color: var(--danger); font-weight: 800; margin-top: 15px; padding: 10px; border: 2px dashed var(--danger); border-radius: 8px; display: inline-block; background: rgba(220, 38, 38, 0.05); text-transform: uppercase; }
-
-        .theme-toggle { align-self: flex-end; background: var(--card); border: 2px solid var(--border); padding: 10px 20px; border-radius: 50px; cursor: pointer; color: var(--text); font-weight: 600; font-size: 0.85rem; display: flex; align-items: center; gap: 10px; margin-bottom: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-
-        .section-title { font-size: 0.85rem; font-weight: 800; color: var(--primary); text-transform: uppercase; margin: 35px 0 15px 0; border-bottom: 2px solid var(--accent); padding-bottom: 5px; display: flex; align-items: center; gap: 8px; }
-
+        h1 { font-size: 1.8rem; color: var(--primary); margin: 0; font-weight: 800; }
+        .subtitle { font-size: 0.85rem; color: var(--danger); font-weight: 800; margin-top: 15px; padding: 10px; border: 2px dashed var(--danger); border-radius: 8px; display: inline-block; background: rgba(220, 38, 38, 0.05); }
+        .theme-toggle { align-self: flex-end; background: var(--card); border: 2px solid var(--border); padding: 10px 20px; border-radius: 50px; cursor: pointer; color: var(--text); font-weight: 600; font-size: 0.85rem; margin-bottom: 10px; }
+        .section-title { font-size: 0.85rem; font-weight: 800; color: var(--primary); text-transform: uppercase; margin: 35px 0 15px 0; border-bottom: 2px solid var(--accent); padding-bottom: 5px; }
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; }
         .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
-        
         .field-group { display: flex; flex-direction: column; margin-bottom: 10px; }
-        label { font-size: 0.75rem; font-weight: 700; color: var(--label); margin-bottom: 6px; text-transform: uppercase; margin-left: 5px; }
-        
-        input, select { width: 100%; padding: 12px 16px; border-radius: 10px; border: 2px solid var(--border); background: var(--bg); color: var(--text); font-size: 1rem; font-family: inherit; }
-        input:focus, select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px var(--accent); }
-
-        .detenido-card { background: var(--accent); padding: 20px; border-radius: 15px; margin-bottom: 15px; border: 1px solid var(--border); position: relative; animation: slideIn 0.3s ease-out; }
-        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        .btn-add { background: transparent; color: var(--primary); border: 2px dashed var(--primary); padding: 14px; width: 100%; border-radius: 12px; cursor: pointer; font-weight: 800; font-size: 0.9rem; margin-top: 5px; }
-        .btn-add:hover { background: var(--primary); color: white; }
-        
-        .btn-remove { position: absolute; top: -10px; right: -10px; background: var(--danger); color: white; border: none; border-radius: 50%; width: 28px; height: 28px; font-size: 12px; cursor: pointer; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
-
-        .option-card { background: var(--bg); border: 2px solid var(--border); padding: 20px; border-radius: 15px; margin: 25px 0 15px 0; display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
-        .option-card.active { border-color: var(--success); background: rgba(5, 150, 105, 0.05); }
-        .switch { position: relative; width: 50px; height: 26px; background: var(--border); border-radius: 20px; }
-        .switch::after { content: ''; position: absolute; width: 20px; height: 20px; background: white; border-radius: 50%; top: 3px; left: 3px; transition: 0.3s; }
-        input:checked + .option-card .switch { background: var(--success); }
-        input:checked + .option-card .switch::after { transform: translateX(24px); }
-
-        .btn-main { width: 100%; background: var(--primary); color: white; padding: 20px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: 800; cursor: pointer; margin-top: 40px; box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3); text-transform: uppercase; letter-spacing: 1px; }
-        .btn-main:hover { transform: translateY(-3px); filter: brightness(1.1); box-shadow: 0 15px 30px rgba(37, 99, 235, 0.4); }
-
-        /* Modal */
-        .modal { display: none; position: fixed; inset: 0; background: rgba(2, 6, 23, 0.85); backdrop-filter: blur(8px); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
-        .modal-content { background: var(--card); width: 100%; max-width: 550px; padding: 35px; border-radius: 25px; box-shadow: 0 30px 60px rgba(0,0,0,0.5); }
-        .resumen-list { margin: 25px 0; border: 1px solid var(--border); border-radius: 15px; overflow: hidden; }
-        .resumen-row { display: flex; justify-content: space-between; padding: 12px 15px; border-bottom: 1px solid var(--border); background: var(--bg); }
-        .resumen-row:last-child { border: none; }
-        .resumen-l { font-size: 0.7rem; font-weight: 800; color: var(--label); text-transform: uppercase; }
-        .resumen-v { font-size: 0.9rem; font-weight: 700; color: var(--text); text-align: right; }
-
-        .modal-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .btn-cancel { background: var(--bg); border: 2px solid var(--border); color: var(--text); padding: 15px; border-radius: 12px; font-weight: 700; cursor: pointer; }
-        .btn-go { background: var(--success); color: white; border: none; padding: 15px; border-radius: 12px; font-weight: 800; cursor: pointer; box-shadow: 0 5px 15px rgba(5, 150, 105, 0.3); }
+        label { font-size: 0.75rem; font-weight: 700; color: var(--label); margin-bottom: 6px; text-transform: uppercase; }
+        input, select { width: 100%; padding: 12px 16px; border-radius: 10px; border: 2px solid var(--border); background: var(--bg); color: var(--text); font-size: 1rem; }
+        .detenido-card { background: var(--accent); padding: 20px; border-radius: 15px; margin-bottom: 15px; border: 1px solid var(--border); position: relative; }
+        .btn-add { background: transparent; color: var(--primary); border: 2px dashed var(--primary); padding: 14px; width: 100%; border-radius: 12px; cursor: pointer; font-weight: 800; margin-top: 5px; }
+        .btn-main { width: 100%; background: var(--primary); color: white; padding: 20px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: 800; cursor: pointer; margin-top: 40px; text-transform: uppercase; }
+        .modal { display: none; position: fixed; inset: 0; background: rgba(2, 6, 23, 0.85); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
+        .modal-content { background: var(--card); width: 100%; max-width: 550px; padding: 35px; border-radius: 25px; }
     </style>
 </head>
 <body>
 
-<button class="theme-toggle" onclick="document.body.classList.toggle('dark-mode')">
-    🌓 MODO OSCURO / CLARO
-</button>
+<button class="theme-toggle" onclick="document.body.classList.toggle('dark-mode')">🌓 MODO OSCURO / CLARO</button>
 
 <div class="app-container">
     <div class="header">
-        <h1>⚖️ Acta de registro de recepción de comunicación policial vía telefónica - PROYECTO OMAR</h1>
-        <div class="subtitle">USO PARA FINES INTERNOS - PROHIBIDA LA DIFUSIÓN SIN AUTORIZACIÓN</div>
+        <h1>⚖️ Acta de Recepción Telefónica - PROYECTO OMAR</h1>
+        <div class="subtitle">USO INTERNO - PROHIBIDA SU DIFUSIÓN</div>
     </div>
     
     <form id="docForm">
-        <div class="section-title">🏛️ 1. Datos del Acta y Fiscalía</div>
+        <div class="section-title">🏛️ 1. Datos de Fiscalía</div>
         <div class="grid-3">
+            <div class="field-group"><label>Hora Llamada</label><input type="time" id="hora_acta"></div>
+            <div class="field-group"><label>Fecha</label><input type="text" id="fecha_acta"></div>
             <div class="field-group">
-                <label>Hora de Llamada (Acta)</label>
-                <input type="time" id="hora_acta" required>
-            </div>
-            <div class="field-group">
-                <label>Fecha del Acta</label>
-                <input type="text" id="fecha_acta">
-            </div>
-            <div class="field-group">
-                <label>N° Fiscalía</label>
+                <label>Fiscalía</label>
                 <select id="num_fiscalia">
                     <option value="PRIMERA">PRIMERA</option>
                     <option value="SEGUNDA" selected>SEGUNDA</option>
@@ -109,233 +65,83 @@
                 </select>
             </div>
         </div>
-        <div class="field-group">
-            <label>Fiscal Responsable (Receptor de la llamada)</label>
-            <input type="text" id="fiscal_responsable" placeholder="Ej: DRA. SARA RUTH YARLEQUÉ ADRIANZE">
-        </div>
+        <div class="field-group"><label>Fiscal Responsable</label><input type="text" id="fiscal_responsable"></div>
 
-        <div class="section-title">👮 2. Datos de la Comunicación Policial</div>
+        <div class="section-title">👮 2. Datos del Efectivo PNP</div>
         <div class="grid-3">
-            <div class="field-group">
-                <label>Celular del PNP</label>
-                <input type="text" id="celular_pnp" placeholder="Número de celular">
-            </div>
-            <div class="field-group">
-                <label>Nombre del PNP</label>
-                <input type="text" id="nombre_pnp" placeholder="Grado y Nombre Completo">
-            </div>
-            <div class="field-group">
-                <label>DNI del PNP</label>
-                <input type="text" id="dni_pnp" maxlength="8">
-            </div>
+            <div class="field-group"><label>Celular</label><input type="text" id="celular_pnp"></div>
+            <div class="field-group"><label>Nombre PNP</label><input type="text" id="nombre_pnp"></div>
+            <div class="field-group"><label>DNI PNP</label><input type="text" id="dni_pnp" maxlength="8"></div>
         </div>
         <div class="field-group">
-            <label>Unidad Policial (Comisaría o Departamento)</label>
-            <select id="unidad_pnp" onchange="verificarUnidad()">
-                <option value="CEOPOL I MACREPOL PIURA">CEOPOL I MACREPOL PIURA</option>
-                <option value="COMISARÍA PNP">COMISARÍA PNP</option>
-                <option value="COMISARÍA PNP DE EL INDIO">COMISARÍA PNP DE EL INDIO</option>
-                <option value="COMISARÍA PNP DE TACALÁ">COMISARÍA PNP DE TACALÁ</option>
-                <option value="COMISARÍA PNP DE VEINTISÉIS DE OCTUBRE">COMISARÍA PNP DE VEINTISÉIS DE OCTUBRE</option>
-                <option value="COMISARIA LA ARENA">COMISARIA LA ARENA</option>
-                <option value="COMISARIA SULLANA">COMISARIA SULLANA</option>
-                <option value="CPNP 26 DE OCTUBRE">CPNP 26 DE OCTUBRE</option>
+            <label>Unidad Policial</label>
+            <select id="unidad_pnp">
+                <option value="CPNP PIURA">CPNP PIURA</option>
                 <option value="CPNP CASTILLA">CPNP CASTILLA</option>
-                <option value="CPNP CATACAOS">CPNP CATACAOS</option>
-                <option value="CPNP CHALACO">CPNP CHALACO</option>
-                <option value="CPNP CRUZETA">CPNP CRUZETA</option>
-                <option value="CPNP EL ALTO">CPNP EL ALTO</option>
+                <option value="CPNP SAN MARTIN">CPNP SAN MARTIN</option>
+                <option value="CPNP 26 DE OCTUBRE">CPNP 26 DE OCTUBRE</option>
+                <option value="CPNP TACALÁ">CPNP TACALÁ</option>
                 <option value="CPNP EL INDIO">CPNP EL INDIO</option>
-                <option value="CPNP LA HUACA">CPNP LA HUACA</option>
+                <option value="CPNP CATACAOS">CPNP CATACAOS</option>
                 <option value="CPNP LA UNIÓN">CPNP LA UNIÓN</option>
                 <option value="CPNP LOS ALGARROBOS">CPNP LOS ALGARROBOS</option>
-                <option value="CPNP MANCORA">CPNP MANCORA</option>
-                <option value="CPNP PAITA">CPNP PAITA</option>
-                <option value="CPNP PIURA" selected>CPNP PIURA</option>
-                <option value="CPNP PUEBLO NUEVO DE COLAN">CPNP PUEBLO NUEVO DE COLAN</option>
-                <option value="CPNP SAN MARTIN">CPNP SAN MARTIN</option>
-                <option value="CPNP TACALÁ">CPNP TACALÁ</option>
-                <option value="CPNP TALANDRACAS">CPNP TALANDRACAS</option>
-                <option value="CPNP TALARA">CPNP TALARA</option>
-                <option value="CPNP TAMARINDO">CPNP TAMARINDO</option>
                 <option value="CPNP TAMBOGRANDE">CPNP TAMBOGRANDE</option>
-                <option value="DEP. ROBO DE VEHÍCULOS PNP">DEP. ROBO DE VEHÍCULOS PNP</option>
-                <option value="DEPROVE PIURA">DEPROVE PIURA</option>
-                <option value="DIRECCIÓN DESCONCENTRADA INDECI">DIRECCIÓN DESCONCENTRADA INDECI</option>
-                <option value="EMERGENCIA PNP">EMERGENCIA PNP</option>
-                <option value="ESCUADRON EMERGENCIA 105 SULLANA">ESCUADRON EMERGENCIA 105 SULLANA</option>
-                <option value="ESCUADRON VERDE SULLANA">ESCUADRON VERDE SULLANA</option>
-                <option value="INVESTIGACIÓN CRIMINAL PNP">INVESTIGACIÓN CRIMINAL PNP</option>
                 <option value="RADIO PATRULLA PNP">RADIO PATRULLA PNP</option>
-                <option value="REGPOL PIURA SEC.">REGPOL PIURA SEC.</option>
-                <option value="SERENAZGO">SERENAZGO</option>
-                <option value="SERENAZGO (SECOM)">SERENAZGO (SECOM)</option>
-                <option value="OTROS">➕ OTROS (ESPECIFICAR)...</option>
+                <option value="INVESTIGACIÓN CRIMINAL PNP">INVESTIGACIÓN CRIMINAL PNP</option>
+                <option value="DEP. ROBO DE VEHÍCULOS PNP">DEP. ROBO DE VEHÍCULOS PNP</option>
             </select>
-            <input type="text" id="unidad_pnp_otros" style="display: none; margin-top: 10px;" placeholder="Escriba el nombre de la Unidad...">
         </div>
 
         <div class="section-title">👤 3. Datos de los Detenidos</div>
         <div id="contenedor_detenidos">
             <div class="detenido-card grid">
-                <div class="field-group">
-                    <label>Nombre Completo</label>
-                    <input type="text" class="detenido_nombre" placeholder="Nombre del Detenido">
-                </div>
-                <div class="field-group">
-                    <label>DNI / Documento</label>
-                    <input type="text" class="detenido_dni" placeholder="N° Documento">
-                </div>
+                <div class="field-group"><label>Nombre Completo</label><input type="text" class="detenido_nombre"></div>
+                <div class="field-group"><label>DNI / Documento</label><input type="text" class="detenido_dni"></div>
             </div>
         </div>
-        <button type="button" class="btn-add" onclick="agregarDetenido()">➕ AGREGAR OTRO DETENIDO</button>
+        <button type="button" class="btn-add" onclick="agregarDetenido()">➕ OTRO DETENIDO</button>
 
-        <div class="section-title">🚨 4. Detalles de la Intervención</div>
+        <div class="section-title">🚨 4. Intervención</div>
         <div class="grid-3">
-            <div class="field-group">
-                <label>Hora de Intervención</label>
-                <input type="time" id="hora_intervencion">
-            </div>
-            <div class="field-group">
-                <label>Delito Atribuido</label>
-                <input type="text" id="delito" placeholder="Ej: ROBO AGRAVADO">
-            </div>
-            <div class="field-group">
-                <label>Nombre Agraviado</label>
-                <input type="text" id="nombre_agraviado" placeholder="Nombre de la víctima">
-            </div>
+            <div class="field-group"><label>Hora Int.</label><input type="time" id="hora_intervencion"></div>
+            <div class="field-group"><label>Delito</label><input type="text" id="delito"></div>
+            <div class="field-group"><label>Agraviado</label><input type="text" id="nombre_agraviado"></div>
         </div>
-        <div class="field-group">
-            <label>Lugar de Intervención</label>
-            <input type="text" id="lugar_intervencion" placeholder="Dirección exacta">
-        </div>
+        <div class="field-group"><label>Lugar</label><input type="text" id="lugar_intervencion"></div>
 
-        <input type="checkbox" id="check_arresto" hidden onchange="toggleArresto()">
-        <label for="check_arresto" class="option-card" id="arresto_card">
-            <div class="option-text">
-                <span style="font-weight: 800; font-size: 1.1rem;">🤝 ¿Arresto Ciudadano?</span>
-                <span style="font-size: 0.8rem; color: var(--label);">Marcar solo si intervino un civil inicialmente.</span>
-            </div>
-            <div class="switch"></div>
-        </label>
-
-        <div id="campos_arresto" style="display: none; background: var(--accent); padding: 25px; border-radius: 15px; margin-top: -15px; border: 1px solid var(--border);">
-            <div class="grid">
-                <div class="field-group">
-                    <label>Nombre del Ciudadano</label>
-                    <input type="text" id="nombre_ciudadano" placeholder="¿Quién arrestó?">
-                </div>
-                <div class="field-group">
-                    <label>DNI Ciudadano</label>
-                    <input type="text" id="dni_ciudadano" maxlength="8">
-                </div>
-            </div>
-            <div class="field-group" style="margin-top: 15px;">
-                <label>Supuesto de Flagrancia</label>
-                <select id="tipo_flagrancia">
-                    <option value="PROPIAMENTE DICHA (Flagrancia estricta)">PROPIAMENTE DICHA (Flagrancia estricta)</option>
-                    <option value="CUASI FLAGRANCIA">CUASI FLAGRANCIA</option>
-                </select>
-            </div>
-        </div>
-
-        <div class="section-title">🏁 5. Cierre</div>
-        <div class="field-group">
-            <label>Hora de Cierre del Acta</label>
-            <input type="time" id="hora_cierre">
-        </div>
-
-        <button type="button" class="btn-main" onclick="abrirResumen()">🔍 Generar Acta Judicial</button>
+        <button type="button" class="btn-main" onclick="procesarWord()">📥 DESCARGAR MODELO_DOS</button>
     </form>
 </div>
 
-<div id="modalResumen" class="modal">
-    <div class="modal-content">
-        <h2 style="margin:0; color: var(--primary); font-weight: 800;">VERIFICACIÓN FINAL</h2>
-        <div class="resumen-list" id="listaResumen"></div>
-        <div class="modal-btns">
-            <button class="btn-cancel" onclick="cerrarResumen()">CORREGIR</button>
-            <button class="btn-go" onclick="procesarWord()">CONFIRMAR Y DESCARGAR</button>
-        </div>
-    </div>
-</div>
-
 <script>
-    // Configuración Inicial de Fecha
     window.onload = function() {
         const meses = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
         const f = new Date();
         document.getElementById('fecha_acta').value = `${f.getDate()} de ${meses[f.getMonth()]} del ${f.getFullYear()}`;
     };
 
-    function verificarUnidad() {
-        const select = document.getElementById('unidad_pnp');
-        const inputOtros = document.getElementById('unidad_pnp_otros');
-        inputOtros.style.display = (select.value === "OTROS") ? "block" : "none";
-    }
-
-    let contadorDetenidos = 1;
     function agregarDetenido() {
-        contadorDetenidos++;
         const contenedor = document.getElementById('contenedor_detenidos');
-        const id = Date.now();
         const div = document.createElement('div');
         div.className = 'detenido-card grid';
-        div.id = `bloque_${id}`;
         div.innerHTML = `
-            <button type="button" class="btn-remove" onclick="document.getElementById('bloque_${id}').remove()">✕</button>
-            <div class="field-group"><label>Nombre Detenido</label><input type="text" class="detenido_nombre"></div>
+            <div class="field-group"><label>Nombre Completo</label><input type="text" class="detenido_nombre"></div>
             <div class="field-group"><label>DNI</label><input type="text" class="detenido_dni"></div>
         `;
         contenedor.appendChild(div);
     }
 
-    function toggleArresto() {
-        const check = document.getElementById('check_arresto').checked;
-        document.getElementById('campos_arresto').style.display = check ? 'block' : 'none';
-        document.getElementById('arresto_card').classList.toggle('active', check);
-    }
-
-    function getUnidadFinal() {
-        const sel = document.getElementById('unidad_pnp').value;
-        return (sel === "OTROS") ? document.getElementById('unidad_pnp_otros').value.toUpperCase() : sel;
-    }
-
-    function abrirResumen() {
-        const det0 = document.querySelectorAll('.detenido_nombre')[0].value;
-        if(!det0) return alert("Error: Debe ingresar al menos un detenido.");
-        
-        const dataRes = [
-            { l: "Primer Detenido", v: det0.toUpperCase() },
-            { l: "Unidad PNP", v: getUnidadFinal() },
-            { l: "Delito", v: document.getElementById('delito').value.toUpperCase() || "NO ESPECIFICADO" },
-            { l: "Fiscalía", v: document.getElementById('num_fiscalia').value }
-        ];
-
-        document.getElementById('listaResumen').innerHTML = dataRes.map(i => `
-            <div class="resumen-row"><span class="resumen-l">${i.l}</span><span class="resumen-v">${i.v}</span></div>
-        `).join('');
-        document.getElementById('modalResumen').style.display = 'flex';
-    }
-
-    function cerrarResumen() { document.getElementById('modalResumen').style.display = 'none'; }
-
     async function procesarWord() {
-        cerrarResumen();
-        
-        // Recopilar Detenidos
         const n = document.querySelectorAll('.detenido_nombre');
         const d = document.querySelectorAll('.detenido_dni');
         let lista = [];
         n.forEach((input, i) => {
             if(input.value.trim() !== "") {
-                lista.push({ num: i+1, nombre: input.value.toUpperCase().trim(), dni: d[i].value.trim() || "---" });
+                lista.push({ num: i+1, nombre: input.value.toUpperCase().trim(), dni: d[i].value.trim() });
             }
         });
 
-        const primerNombre = lista[0] ? lista[0].nombre.replace(/\s+/g, '_') : "ACTA";
-
-        // Objeto de Datos para MODELO_DOS.docx
+        // MAPEADO DE DATOS (Asegúrate que coincidan con el Word)
         const data = {
             HORA: document.getElementById('hora_acta').value,
             FECHA: document.getElementById('fecha_acta').value,
@@ -343,44 +149,30 @@
             FISCAL_RESPONSABLE: document.getElementById('fiscal_responsable').value.toUpperCase(),
             CELULAR_PNP: document.getElementById('celular_pnp').value,
             NOMBRE_PNP: document.getElementById('nombre_pnp').value.toUpperCase(),
-            DNI_PNP: document.getElementById('dni_pnp').value,
-            UNIDAD_PNP: getUnidadFinal(),
+            DNI_PNP: document.getElementById('dni_pnp').value, // ESTE ES EL QUE SALÍA UNDEFINED
+            UNIDAD_PNP: document.getElementById('unidad_pnp').value,
             lista_detenidos: lista,
             HORA_INTERVENCION: document.getElementById('hora_intervencion').value,
-            LUGAR_INTERVENCION: document.getElementById('lugar_intervencion').value.toUpperCase(),
             DELITO: document.getElementById('delito').value.toUpperCase(),
             NOMBRE_AGRAVIADO: document.getElementById('nombre_agraviado').value.toUpperCase(),
-            es_arresto_ciudadano: document.getElementById('check_arresto').checked,
-            NOMBRE_CIUDADANO: document.getElementById('nombre_ciudadano').value.toUpperCase(),
-            DNI_CIUDADANO: document.getElementById('dni_ciudadano').value,
-            TIPO_FLAGRANCIA: document.getElementById('tipo_flagrancia').value,
-            HORA_CIERRE: document.getElementById('hora_cierre').value
+            LUGAR_INTERVENCION: document.getElementById('lugar_intervencion').value.toUpperCase(),
+            HORA_CIERRE: "---"
         };
 
         try {
             const response = await fetch('MODELO_DOS.docx');
-            if(!response.ok) throw new Error("No se pudo cargar MODELO_DOS.docx");
-            
             const content = await response.arrayBuffer();
             const zip = new PizZip(content);
             const doc = new window.docxtemplater(zip, { paragraphLoop: true, linebreaks: true });
             
             doc.render(data);
             
-            const out = doc.getZip().generate({ 
-                type: "blob", 
-                mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document" 
-            });
-            
-            saveAs(out, `RECEPCION_${primerNombre}.docx`);
+            const out = doc.getZip().generate({ type: "blob", mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document" });
+            saveAs(out, `ACTA_${lista[0] ? lista[0].nombre : "GENERADA"}.docx`);
         } catch (e) {
-            console.error(e);
-            alert("❌ ERROR CRÍTICO: El archivo MODELO_DOS.docx no se encuentra en la carpeta o el navegador bloqueó la lectura.");
+            alert("Error: Verifica que MODELO_DOS.docx esté en la misma carpeta.");
         }
     }
 </script>
-
 </body>
 </html>
-
-```
