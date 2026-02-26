@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Acta de Recepción telefónica- PROYECTO OMAR</title>
@@ -377,5 +378,68 @@
         XLSX.writeFile(wb, `EXCEL_MODELO_${data.lista_detenidos[0]?.nombre || 'REPORTE'}.xlsx`);
     }
 </script>
+    async function descargarExcel() {
+    // 1. Obtiene los datos actuales del formulario sin alterar los originales
+    const data = obtenerDataFinal();
+    const nombreArchivoModelo = "EXCEL_UNO.xlsx"; 
+
+    if (!data.lista_detenidos || data.lista_detenidos.length === 0) {
+        alert("No hay detenidos para registrar.");
+        return;
+    }
+
+    try {
+        // 2. Intenta leer tu plantilla EXCEL_UNO.xlsx
+        const respuesta = await fetch(nombreArchivoModelo);
+        if (!respuesta.ok) throw new Error("No se encontró el archivo EXCEL_UNO.xlsx");
+        
+        const arrayBuffer = await respuesta.arrayBuffer();
+        const workbook = XLSX.read(arrayBuffer, { type: 'array' });
+        const nombreHoja = workbook.SheetNames[0]; 
+        const worksheet = workbook.Sheets[nombreHoja];
+
+        // 3. Extrae el contenido para moverlo (Insertar arriba)
+        let contenido = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+        
+        // Mantenemos la primera fila (encabezados de tu plantilla)
+        const encabezado = contenido.slice(0, 1);
+        const datosViejos = contenido.slice(1);
+
+        // 4. Mapeamos los nuevos datos respetando tus columnas A-Q
+        const nuevasFilas = data.lista_detenidos.map(det => {
+            const fiscalLimpio = data.FISCAL_RESPONSABLE.replace(/DR\.|DRA\./g, "").trim().toUpperCase();
+            return [
+                fiscalLimpio,                 // A: Fiscal
+                data.FECHA,                   // B: Fecha
+                data.HORA_INTERVENCION,       // C: Hora
+                data.LUGAR_INTERVENCION,      // D: Lugar
+                data.UNIDAD_PNP,              // E: Comisaría
+                data.NOMBRE_PNP,              // F: PNP
+                data.DNI_PNP,                 // G: DNI PNP
+                det.nombre.toUpperCase(),     // H: Detenido
+                det.dni,                      // I: DNI Detenido
+                det.edad,                     // J: Edad
+                data.lista_detenidos.length,  // K: Cantidad
+                data.DELITO.toUpperCase(),    // L: Delito
+                "", "", "", "",               // M, N, O, P (Vacíos para llenar luego)
+                data.NOMBRE_AGRAVIADO.toUpperCase() // Q: Agraviado
+            ];
+        });
+
+        // 5. Re-ensamblamos: Títulos -> NUEVO -> VIEJO (Para que lo nuevo salga arriba)
+        const resultadoFinal = encabezado.concat(nuevasFilas, datosViejos);
+
+        // 6. Sobreescribimos la hoja en memoria y descargamos
+        const nuevaWs = XLSX.utils.aoa_to_sheet(resultadoFinal);
+        workbook.Sheets[nombreHoja] = nuevaWs;
+
+        const hoy = new Date();
+        XLSX.writeFile(workbook, `TURNO_ACTUALIZADO_${hoy.getDate()}_${hoy.getMonth()+1}.xlsx`);
+
+    } catch (error) {
+        console.error("Error en Excel:", error);
+        alert("Error al generar Excel: Verifica que 'EXCEL_UNO.xlsx' esté en la misma carpeta que el formulario.");
+    }
+}
 </body>
 </html>
