@@ -12,15 +12,16 @@
     
     <style>
         :root {
-            --bg: #f8fafc; --card: #ffffff; --text: #0f172a; --primary: #2563eb;
-            --success: #059669; --border: #e2e8f0; --label: #64748b; --accent: #dbeafe;
-            --danger: #dc2626;
-        }
-
-        body.dark-mode {
             --bg: #020617; --card: #1e293b; --text: #f8fafc; --primary: #60a5fa;
             --success: #10b981; --border: #334155; --label: #94a3b8; --accent: #1e293b;
             --danger: #ef4444;
+        }
+
+        /* Clase para el modo claro (opcional por si quieres volver) */
+        body.light-mode {
+            --bg: #f8fafc; --card: #ffffff; --text: #0f172a; --primary: #2563eb;
+            --success: #059669; --border: #e2e8f0; --label: #64748b; --accent: #dbeafe;
+            --danger: #dc2626;
         }
 
         * { box-sizing: border-box; transition: all 0.2s ease; }
@@ -37,7 +38,7 @@
         .section-title { font-size: 0.85rem; font-weight: 800; color: var(--primary); text-transform: uppercase; margin: 35px 0 15px 0; border-bottom: 2px solid var(--accent); padding-bottom: 5px; display: flex; align-items: center; gap: 8px; }
 
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; }
-        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; }
         
         .field-group { display: flex; flex-direction: column; margin-bottom: 10px; }
         label { font-size: 0.75rem; font-weight: 700; color: var(--label); margin-bottom: 6px; text-transform: uppercase; margin-left: 5px; }
@@ -63,7 +64,6 @@
         .btn-main { width: 100%; background: var(--primary); color: white; padding: 20px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: 800; cursor: pointer; margin-top: 40px; box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3); text-transform: uppercase; letter-spacing: 1px; }
         .btn-main:hover { transform: translateY(-3px); filter: brightness(1.1); box-shadow: 0 15px 30px rgba(37, 99, 235, 0.4); }
 
-        /* Modal */
         .modal { display: none; position: fixed; inset: 0; background: rgba(2, 6, 23, 0.85); backdrop-filter: blur(8px); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
         .modal-content { background: var(--card); width: 100%; max-width: 550px; padding: 35px; border-radius: 25px; box-shadow: 0 30px 60px rgba(0,0,0,0.5); }
         .resumen-list { margin: 25px 0; border: 1px solid var(--border); border-radius: 15px; overflow: hidden; }
@@ -79,8 +79,8 @@
 </head>
 <body>
 
-<button class="theme-toggle" onclick="document.body.classList.toggle('dark-mode')">
-    🌓 MODO OSCURO / CLARO
+<button class="theme-toggle" onclick="document.body.classList.toggle('light-mode')">
+    🌓 CAMBIAR MODO (CLARO/OSCURO)
 </button>
 
 <div class="app-container">
@@ -133,43 +133,10 @@
             <label>Unidad Policial (Comisaría o Departamento)</label>
             <select id="unidad_pnp" onchange="verificarUnidad()">
                 <option value="CEOPOL I MACREPOL PIURA">CEOPOL I MACREPOL PIURA</option>
-                <option value="COMISARÍA PNP">COMISARÍA PNP</option>
-                <option value="COMISARÍA PNP DE EL INDIO">COMISARÍA PNP DE EL INDIO</option>
-                <option value="COMISARÍA PNP DE TACALÁ">COMISARÍA PNP DE TACALÁ</option>
-                <option value="COMISARÍA PNP DE VEINTISÉIS DE OCTUBRE">COMISARÍA PNP DE VEINTISÉIS DE OCTUBRE</option>
-                <option value="COMISARIA LA ARENA">COMISARIA LA ARENA</option>
-                <option value="COMISARIA SULLANA">COMISARIA SULLANA</option>
-                <option value="CPNP 26 DE OCTUBRE">CPNP 26 DE OCTUBRE</option>
-                <option value="CPNP CASTILLA">CPNP CASTILLA</option>
-                <option value="CPNP CATACAOS">CPNP CATACAOS</option>
-                <option value="CPNP CHALACO">CPNP CHALACO</option>
-                <option value="CPNP CRUZETA">CPNP CRUZETA</option>
-                <option value="CPNP EL ALTO">CPNP EL ALTO</option>
-                <option value="CPNP EL INDIO">CPNP EL INDIO</option>
-                <option value="CPNP LA HUACA">CPNP LA HUACA</option>
-                <option value="CPNP LA UNIÓN">CPNP LA UNIÓN</option>
-                <option value="CPNP LOS ALGARROBOS">CPNP LOS ALGARROBOS</option>
-                <option value="CPNP MANCORA">CPNP MANCORA</option>
-                <option value="CPNP PAITA">CPNP PAITA</option>
                 <option value="CPNP PIURA" selected>CPNP PIURA</option>
-                <option value="CPNP PUEBLO NUEVO DE COLAN">CPNP PUEBLO NUEVO DE COLAN</option>
+                <option value="CPNP CASTILLA">CPNP CASTILLA</option>
                 <option value="CPNP SAN MARTIN">CPNP SAN MARTIN</option>
-                <option value="CPNP TACALÁ">CPNP TACALÁ</option>
-                <option value="CPNP TALANDRACAS">CPNP TALANDRACAS</option>
-                <option value="CPNP TALARA">CPNP TALARA</option>
-                <option value="CPNP TAMARINDO">CPNP TAMARINDO</option>
-                <option value="CPNP TAMBOGRANDE">CPNP TAMBOGRANDE</option>
-                <option value="DEP. ROBO DE VEHÍCULOS PNP">DEP. ROBO DE VEHÍCULOS PNP</option>
-                <option value="DEPROVE PIURA">DEPROVE PIURA</option>
-                <option value="DIRECCIÓN DESCONCENTRADA INDECI">DIRECCIÓN DESCONCENTRADA INDECI</option>
-                <option value="EMERGENCIA PNP">EMERGENCIA PNP</option>
-                <option value="ESCUADRON EMERGENCIA 105 SULLANA">ESCUADRON EMERGENCIA 105 SULLANA</option>
-                <option value="ESCUADRON VERDE SULLANA">ESCUADRON VERDE SULLANA</option>
-                <option value="INVESTIGACIÓN CRIMINAL PNP">INVESTIGACIÓN CRIMINAL PNP</option>
-                <option value="RADIO PATRULLA PNP">RADIO PATRULLA PNP</option>
-                <option value="REGPOL PIURA SEC.">REGPOL PIURA SEC.</option>
-                <option value="SERENAZGO">SERENAZGO</option>
-                <option value="SERENAZGO (SECOM)">SERENAZGO (SECOM)</option>
+                <option value="CPNP VEINTISÉIS DE OCTUBRE">CPNP VEINTISÉIS DE OCTUBRE</option>
                 <option value="OTROS">➕ OTROS (ESPECIFICAR)...</option>
             </select>
             <input type="text" id="unidad_pnp_otros" style="display: none; margin-top: 10px;" placeholder="Escriba el nombre de la Unidad...">
@@ -185,6 +152,10 @@
                 <div class="field-group">
                     <label>DNI / Documento</label>
                     <input type="text" class="detenido_dni" placeholder="N° Documento">
+                </div>
+                <div class="field-group">
+                    <label>Edad</label>
+                    <input type="number" class="detenido_edad" placeholder="Edad">
                 </div>
             </div>
         </div>
@@ -214,7 +185,6 @@
         <label for="check_arresto" class="option-card" id="arresto_card">
             <div class="option-text">
                 <span style="font-weight: 800; font-size: 1.1rem;">🤝 ¿Arresto Ciudadano?</span>
-                <span style="font-size: 0.8rem; color: var(--label);">Marcar solo si intervino un civil inicialmente.</span>
             </div>
             <div class="switch"></div>
         </label>
@@ -223,19 +193,12 @@
             <div class="grid">
                 <div class="field-group">
                     <label>Nombre del Ciudadano</label>
-                    <input type="text" id="nombre_ciudadano" placeholder="¿Quién arrestó?">
+                    <input type="text" id="nombre_ciudadano">
                 </div>
                 <div class="field-group">
                     <label>DNI Ciudadano</label>
                     <input type="text" id="dni_ciudadano" maxlength="8">
                 </div>
-            </div>
-            <div class="field-group" style="margin-top: 15px;">
-                <label>Supuesto de Flagrancia</label>
-                <select id="tipo_flagrancia">
-                    <option value="PROPIAMENTE DICHA (Flagrancia estricta)">PROPIAMENTE DICHA (Flagrancia estricta)</option>
-                    <option value="CUASI FLAGRANCIA">CUASI FLAGRANCIA</option>
-                </select>
             </div>
         </div>
 
@@ -245,23 +208,23 @@
             <input type="time" id="hora_cierre">
         </div>
 
-        <button type="button" class="btn-main" onclick="abrirResumen()">🔍 Generar Acta Judicial</button>
+        <button type="button" class="btn-main" onclick="abrirResumen()">🔍 Generar Documentos Judiciales</button>
     </form>
 </div>
 
 <div id="modalResumen" class="modal">
     <div class="modal-content">
-        <h2 style="margin:0; color: var(--primary); font-weight: 800;">VERIFICACIÓN FINAL</h2>
+        <h2 style="margin:0; color: var(--primary); font-weight: 800;">CONFIRMACIÓN</h2>
+        <p>Se generarán 2 archivos: MODELO_DOS y MODELO_TABLA.</p>
         <div class="resumen-list" id="listaResumen"></div>
         <div class="modal-btns">
             <button class="btn-cancel" onclick="cerrarResumen()">CORREGIR</button>
-            <button class="btn-go" onclick="procesarWord()">CONFIRMAR Y DESCARGAR</button>
+            <button class="btn-go" onclick="procesarDocumentos()">GENERAR Y DESCARGAR</button>
         </div>
     </div>
 </div>
 
 <script>
-    // Configuración Inicial de Fecha
     window.onload = function() {
         const meses = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
         const f = new Date();
@@ -270,13 +233,10 @@
 
     function verificarUnidad() {
         const select = document.getElementById('unidad_pnp');
-        const inputOtros = document.getElementById('unidad_pnp_otros');
-        inputOtros.style.display = (select.value === "OTROS") ? "block" : "none";
+        document.getElementById('unidad_pnp_otros').style.display = (select.value === "OTROS") ? "block" : "none";
     }
 
-    let contadorDetenidos = 1;
     function agregarDetenido() {
-        contadorDetenidos++;
         const contenedor = document.getElementById('contenedor_detenidos');
         const id = Date.now();
         const div = document.createElement('div');
@@ -286,6 +246,7 @@
             <button type="button" class="btn-remove" onclick="document.getElementById('bloque_${id}').remove()">✕</button>
             <div class="field-group"><label>Nombre Detenido</label><input type="text" class="detenido_nombre"></div>
             <div class="field-group"><label>DNI</label><input type="text" class="detenido_dni"></div>
+            <div class="field-group"><label>Edad</label><input type="number" class="detenido_edad"></div>
         `;
         contenedor.appendChild(div);
     }
@@ -303,39 +264,31 @@
 
     function abrirResumen() {
         const det0 = document.querySelectorAll('.detenido_nombre')[0].value;
-        if(!det0) return alert("Error: Debe ingresar al menos un detenido.");
-        
-        const dataRes = [
-            { l: "Primer Detenido", v: det0.toUpperCase() },
-            { l: "Unidad PNP", v: getUnidadFinal() },
-            { l: "Delito", v: document.getElementById('delito').value.toUpperCase() || "NO ESPECIFICADO" },
-            { l: "Fiscalía", v: document.getElementById('num_fiscalia').value }
-        ];
-
-        document.getElementById('listaResumen').innerHTML = dataRes.map(i => `
-            <div class="resumen-row"><span class="resumen-l">${i.l}</span><span class="resumen-v">${i.v}</span></div>
-        `).join('');
+        if(!det0) return alert("Error: Ingrese al menos un detenido.");
         document.getElementById('modalResumen').style.display = 'flex';
     }
 
     function cerrarResumen() { document.getElementById('modalResumen').style.display = 'none'; }
 
-    async function procesarWord() {
+    // Función principal para generar ambos archivos
+    async function procesarDocumentos() {
         cerrarResumen();
         
-        // Recopilar Detenidos
-        const n = document.querySelectorAll('.detenido_nombre');
-        const d = document.querySelectorAll('.detenido_dni');
+        const nombres = document.querySelectorAll('.detenido_nombre');
+        const dnis = document.querySelectorAll('.detenido_dni');
+        const edades = document.querySelectorAll('.detenido_edad');
         let lista = [];
-        n.forEach((input, i) => {
+        nombres.forEach((input, i) => {
             if(input.value.trim() !== "") {
-                lista.push({ num: i+1, nombre: input.value.toUpperCase().trim(), dni: d[i].value.trim() || "---" });
+                lista.push({ 
+                    num: i+1, 
+                    nombre: input.value.toUpperCase().trim(), 
+                    dni: dnis[i].value.trim() || "---",
+                    edad: edades[i].value.trim() || "---"
+                });
             }
         });
 
-        const primerNombre = lista[0] ? lista[0].nombre.replace(/\s+/g, '_') : "ACTA";
-
-        // Objeto de Datos para MODELO_DOS.docx
         const data = {
             HORA: document.getElementById('hora_acta').value,
             FECHA: document.getElementById('fecha_acta').value,
@@ -350,35 +303,29 @@
             LUGAR_INTERVENCION: document.getElementById('lugar_intervencion').value.toUpperCase(),
             DELITO: document.getElementById('delito').value.toUpperCase(),
             NOMBRE_AGRAVIADO: document.getElementById('nombre_agraviado').value.toUpperCase(),
-            es_arresto_ciudadano: document.getElementById('check_arresto').checked,
-            NOMBRE_CIUDADANO: document.getElementById('nombre_ciudadano').value.toUpperCase(),
-            DNI_CIUDADANO: document.getElementById('dni_ciudadano').value,
-            TIPO_FLAGRANCIA: document.getElementById('tipo_flagrancia').value,
             HORA_CIERRE: document.getElementById('hora_cierre').value
         };
 
+        // Generar ambos archivos
+        await generarArchivo('MODELO_DOS.docx', data, `ACTA_RECEPCION_${lista[0].nombre}.docx`);
+        await generarArchivo('MODELO_TABLA.docx', data, `MODELO_TABLA_${lista[0].nombre}.docx`);
+    }
+
+    async function generarArchivo(plantilla, data, nombreSalida) {
         try {
-            const response = await fetch('MODELO_DOS.docx');
-            if(!response.ok) throw new Error("No se pudo cargar MODELO_DOS.docx");
-            
-            const content = await response.arrayBuffer();
+            const resp = await fetch(plantilla);
+            if(!resp.ok) throw new Error("No se halló " + plantilla);
+            const content = await resp.arrayBuffer();
             const zip = new PizZip(content);
             const doc = new window.docxtemplater(zip, { paragraphLoop: true, linebreaks: true });
-            
             doc.render(data);
-            
-            const out = doc.getZip().generate({ 
-                type: "blob", 
-                mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document" 
-            });
-            
-            saveAs(out, `RECEPCION_${primerNombre}.docx`);
+            const out = doc.getZip().generate({ type: "blob", mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document" });
+            saveAs(out, nombreSalida);
         } catch (e) {
             console.error(e);
-            alert("❌ ERROR CRÍTICO: El archivo MODELO_DOS.docx no se encuentra en la carpeta o el navegador bloqueó la lectura.");
+            alert("Error con " + plantilla + ". Asegúrate de que esté en la misma carpeta.");
         }
     }
 </script>
-
 </body>
 </html>
