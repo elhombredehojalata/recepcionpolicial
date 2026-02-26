@@ -13,7 +13,6 @@
     
     <style>
         :root {
-            /* MODO OSCURO POR DEFECTO */
             --bg: #020617; 
             --card: #1e293b; 
             --text: #f8fafc; 
@@ -29,46 +28,31 @@
 
         * { box-sizing: border-box; transition: all 0.2s ease; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
-
         .app-container { width: 100%; max-width: 900px; background: var(--card); padding: 40px; border-radius: 24px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); margin: 20px 0; border: 1px solid var(--border); }
-        
         .header { text-align: center; margin-bottom: 35px; }
         h1 { font-size: 1.5rem; color: var(--primary); margin: 0; font-weight: 800; text-transform: uppercase; }
         .subtitle { font-size: 0.75rem; color: var(--danger); font-weight: 800; margin-top: 10px; padding: 8px 15px; border: 1px solid var(--danger); border-radius: 6px; display: inline-block; text-transform: uppercase; background: rgba(239, 68, 68, 0.1); }
-
         .section-title { font-size: 0.85rem; font-weight: 800; color: var(--primary); text-transform: uppercase; margin: 30px 0 15px 0; border-bottom: 2px solid var(--border); padding-bottom: 5px; }
-
         .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; }
         .field-group { display: flex; flex-direction: column; margin-bottom: 12px; }
         label { font-size: 0.7rem; font-weight: 700; color: var(--label); margin-bottom: 5px; text-transform: uppercase; }
-        
         input, select, textarea { width: 100%; padding: 12px; border-radius: 10px; border: 2px solid var(--border); background: #0f172a; color: white; font-size: 0.95rem; }
-
         .detenido-card { background: rgba(255,255,255,0.03); padding: 20px; border-radius: 15px; margin-bottom: 10px; border: 1px solid var(--border); position: relative; }
         .btn-add { background: transparent; color: var(--primary); border: 2px dashed var(--primary); padding: 12px; width: 100%; border-radius: 12px; cursor: pointer; font-weight: 800; }
-
-        /* Botones de Descarga - 3 OPCIONES */
         .download-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-top: 30px; }
         .btn-dl { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 18px; border-radius: 12px; border: none; cursor: pointer; color: white; font-weight: 800; text-transform: uppercase; font-size: 0.85rem; }
         .btn-acta { background: var(--word); }
         .btn-tabla { background: #4f46e5; }
         .btn-excel { background: var(--excel); }
-
-        /* Loader Overlay */
         #loader-overlay { display: none; position: fixed; inset: 0; background: rgba(2, 6, 23, 0.95); z-index: 9999; flex-direction: column; align-items: center; justify-content: center; }
         .loader-box { width: 320px; text-align: center; }
         .loader-text { margin-bottom: 20px; font-weight: 700; color: var(--primary); min-height: 1.2em; text-transform: uppercase; letter-spacing: 1px; }
         .progress-container { width: 100%; height: 6px; background: #334155; border-radius: 10px; overflow: hidden; }
         .progress-bar { width: 0%; height: 100%; background: var(--primary); box-shadow: 0 0 15px var(--primary); transition: width 0.4s ease; }
-
-        /* Modal Resumen */
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); z-index: 5000; align-items: center; justify-content: center; padding: 20px; }
         .modal-content { background: var(--card); width: 100%; max-width: 650px; padding: 30px; border-radius: 20px; border: 1px solid var(--border); box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); }
         .edit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; max-height: 60vh; overflow-y: auto; padding-right: 10px; }
-        
         .btn-remove { position: absolute; top: -10px; right: -10px; background: var(--danger); color: white; border: none; border-radius: 50%; width: 25px; height: 25px; cursor: pointer; z-index: 10; }
-        
-        /* Checkbox Style for Arresto */
         .option-card { background: #0f172a; border: 2px solid var(--border); padding: 15px; border-radius: 15px; margin: 20px 0; display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
         .option-card.active { border-color: var(--success); background: rgba(16, 185, 129, 0.05); }
     </style>
@@ -86,9 +70,8 @@
 
 <div class="app-container">
     <div class="header">
-        <h1>⚖️ Acta de registro de recepción de comunicación policial vía telefónica - V1.1.3 Angel Oliden</h1>
-        <div class="subtitle">USO PARA FINES INTERNOS - PROHIBIDA LA DIFUSIÓN SIN AUTORIZACIÓN</div>
-        <div class="subtitle">ESTE SISTEMA SE ENCUENTRA EN DESARROLLO. POR FAVOR VERIFICAR LOS DATOS GENERADOS</div>
+        <h1>⚖️ Acta de recepción telefónica - V1.1.3 Angel Oliden</h1>
+        <div class="subtitle">USO INTERNO - PROHIBIDA SU DIFUSIÓN</div>
     </div>
     
     <form id="docForm">
@@ -105,7 +88,19 @@
                 </select>
             </div>
         </div>
-        <div class="field-group"><label>Fiscal Responsable</label><input type="text" id="fiscal_responsable" value="DRA. SARA RUTH YARLEQUÉ ADRIANZE"></div>
+
+        <div class="field-group">
+            <label>Fiscal Responsable</label>
+            <select id="fiscal_responsable" onchange="verificarFiscal()">
+                <option value="DRA. SARA RUTH YARLEQUÉ ADRIANZE">DRA. SARA RUTH YARLEQUÉ ADRIANZE</option>
+                <option value="DRA. NIMIA BORRERO PULACHE">DRA. NIMIA BORRERO PULACHE</option>
+                <option value="DR. JOSE ORLANDO SOLANO">DR. JOSE ORLANDO SOLANO</option>
+                <option value="DRA. ROSA ELENA ALVAREZ">DRA. ROSA ELENA ALVAREZ</option>
+                <option value="DR. HELDER TERAN LUDEÑA">DR. HELDER TERAN LUDEÑA</option>
+                <option value="OTROS">➕ OTRO FISCAL (ESPECIFICAR)...</option>
+            </select>
+            <input type="text" id="fiscal_otros" style="display:none; margin-top:10px;" placeholder="Escriba el nombre del Fiscal...">
+        </div>
 
         <div class="section-title">👮 2. Datos de la Comunicación Policial</div>
         <div class="grid-3">
@@ -114,18 +109,49 @@
             <div class="field-group"><label>DNI PNP</label><input type="text" id="dni_pnp" maxlength="8"></div>
         </div>
         <div class="field-group">
-            <label>Unidad Policial</label>
+            <label>Unidad Policial (Comisaría o Departamento)</label>
             <select id="unidad_pnp" onchange="verificarUnidad()">
-                <option value="CPNP PIURA" selected>CPNP PIURA</option>
+                <option value="CEOPOL I MACREPOL PIURA">CEOPOL I MACREPOL PIURA</option>
+                <option value="COMISARÍA PNP">COMISARÍA PNP</option>
+                <option value="COMISARÍA PNP DE EL INDIO">COMISARÍA PNP DE EL INDIO</option>
+                <option value="COMISARÍA PNP DE TACALÁ">COMISARÍA PNP DE TACALÁ</option>
+                <option value="COMISARÍA PNP DE VEINTISÉIS DE OCTUBRE">COMISARÍA PNP DE VEINTISÉIS DE OCTUBRE</option>
+                <option value="COMISARIA LA ARENA">COMISARIA LA ARENA</option>
+                <option value="COMISARIA SULLANA">COMISARIA SULLANA</option>
+                <option value="CPNP 26 DE OCTUBRE">CPNP 26 DE OCTUBRE</option>
                 <option value="CPNP CASTILLA">CPNP CASTILLA</option>
                 <option value="CPNP CATACAOS">CPNP CATACAOS</option>
+                <option value="CPNP CHALACO">CPNP CHALACO</option>
+                <option value="CPNP CRUZETA">CPNP CRUZETA</option>
+                <option value="CPNP EL ALTO">CPNP EL ALTO</option>
                 <option value="CPNP EL INDIO">CPNP EL INDIO</option>
+                <option value="CPNP LA HUACA">CPNP LA HUACA</option>
+                <option value="CPNP LA UNIÓN">CPNP LA UNIÓN</option>
+                <option value="CPNP LOS ALGARROBOS">CPNP LOS ALGARROBOS</option>
+                <option value="CPNP MANCORA">CPNP MANCORA</option>
+                <option value="CPNP PAITA">CPNP PAITA</option>
+                <option value="CPNP PIURA" selected>CPNP PIURA</option>
+                <option value="CPNP PUEBLO NUEVO DE COLAN">CPNP PUEBLO NUEVO DE COLAN</option>
+                <option value="CPNP SAN MARTIN">CPNP SAN MARTIN</option>
                 <option value="CPNP TACALÁ">CPNP TACALÁ</option>
+                <option value="CPNP TALANDRACAS">CPNP TALANDRACAS</option>
+                <option value="CPNP TALARA">CPNP TALARA</option>
+                <option value="CPNP TAMARINDO">CPNP TAMARINDO</option>
+                <option value="CPNP TAMBOGRANDE">CPNP TAMBOGRANDE</option>
+                <option value="DEP. ROBO DE VEHÍCULOS PNP">DEP. ROBO DE VEHÍCULOS PNP</option>
                 <option value="DEPROVE PIURA">DEPROVE PIURA</option>
+                <option value="DIRECCIÓN DESCONCENTRADA INDECI">DIRECCIÓN DESCONCENTRADA INDECI</option>
                 <option value="EMERGENCIA PNP">EMERGENCIA PNP</option>
+                <option value="ESCUADRON EMERGENCIA 105 SULLANA">ESCUADRON EMERGENCIA 105 SULLANA</option>
+                <option value="ESCUADRON VERDE SULLANA">ESCUADRON VERDE SULLANA</option>
+                <option value="INVESTIGACIÓN CRIMINAL PNP">INVESTIGACIÓN CRIMINAL PNP</option>
+                <option value="RADIO PATRULLA PNP">RADIO PATRULLA PNP</option>
+                <option value="REGPOL PIURA SEC.">REGPOL PIURA SEC.</option>
+                <option value="SERENAZGO">SERENAZGO</option>
+                <option value="SERENAZGO (SECOM)">SERENAZGO (SECOM)</option>
                 <option value="OTROS">➕ OTROS (ESPECIFICAR)...</option>
             </select>
-            <input type="text" id="unidad_pnp_otros" style="display:none; margin-top:10px;" placeholder="Escriba la unidad...">
+            <input type="text" id="unidad_pnp_otros" style="display:none; margin-top:10px;" placeholder="Escriba el nombre de la Unidad...">
         </div>
 
         <div class="section-title">👤 3. Datos de los Detenidos</div>
@@ -150,10 +176,7 @@
 
         <input type="checkbox" id="check_arresto" hidden onchange="toggleArrestoVisual()">
         <label for="check_arresto" class="option-card" id="arresto_card">
-            <div>
-                <span style="font-weight:800; display:block">🤝 ¿Arresto Ciudadano?</span>
-                <small style="color:var(--label)">Marcar si inicialmente intervino un civil</small>
-            </div>
+            <div><span style="font-weight:800; display:block">🤝 ¿Arresto Ciudadano?</span><small style="color:var(--label)">Marcar si inicialmente intervino un civil</small></div>
             <div style="width:20px; height:20px; border:2px solid var(--border); border-radius:4px" id="check_box_visual"></div>
         </label>
 
@@ -185,8 +208,7 @@
 <div id="modalResumen" class="modal">
     <div class="modal-content">
         <h2 style="color:var(--primary); margin-top:0; font-weight:800">EDITAR ANTES DE GENERAR</h2>
-        <div class="edit-grid" id="edit-fields-container">
-            </div>
+        <div class="edit-grid" id="edit-fields-container"></div>
         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; margin-top:25px;">
             <button class="btn-add" style="border-style:solid; border-color:var(--border); color:var(--text)" onclick="cerrarResumen()">CANCELAR</button>
             <button class="btn-dl" style="background:var(--success)" id="btnFinalizarDescarga">CONFIRMAR Y DESCARGAR</button>
@@ -208,18 +230,17 @@
         document.getElementById('unidad_pnp_otros').style.display = (sel === "OTROS") ? "block" : "none";
     }
 
+    function verificarFiscal() {
+        const sel = document.getElementById('fiscal_responsable').value;
+        document.getElementById('fiscal_otros').style.display = (sel === "OTROS") ? "block" : "none";
+    }
+
     function agregarDetenido() {
         const id = Date.now();
         const div = document.createElement('div');
         div.className = 'detenido-card';
         div.id = `bloque_${id}`;
-        div.innerHTML = `
-            <button type="button" class="btn-remove" onclick="document.getElementById('bloque_${id}').remove()">✕</button>
-            <div class="grid-3">
-                <div class="field-group"><label>Nombre Completo</label><input type="text" class="detenido_nombre"></div>
-                <div class="field-group"><label>DNI / DOC</label><input type="text" class="detenido_dni"></div>
-                <div class="field-group"><label>Edad</label><input type="number" class="detenido_edad"></div>
-            </div>`;
+        div.innerHTML = `<button type="button" class="btn-remove" onclick="document.getElementById('bloque_${id}').remove()">✕</button><div class="grid-3"><div class="field-group"><label>Nombre Completo</label><input type="text" class="detenido_nombre"></div><div class="field-group"><label>DNI / DOC</label><input type="text" class="detenido_dni"></div><div class="field-group"><label>Edad</label><input type="number" class="detenido_edad"></div></div>`;
         document.getElementById('contenedor_detenidos').appendChild(div);
     }
 
@@ -230,48 +251,29 @@
         document.getElementById('campos_arresto').style.display = check ? 'block' : 'none';
     }
 
-    // HOJA DE RESUMEN EDITABLE
     function abrirResumen(tipo) {
         currentTarget = tipo;
         const container = document.getElementById('edit-fields-container');
+        const fiscalVal = document.getElementById('fiscal_responsable').value === "OTROS" ? document.getElementById('fiscal_otros').value : document.getElementById('fiscal_responsable').value;
         
-        // Extraemos valores actuales para permitir edición rápida
-        const fields = [
-            { id: 'num_fiscalia', label: 'Fiscalía' },
-            { id: 'fiscal_responsable', label: 'Fiscal Resp.' },
-            { id: 'delito', label: 'Delito' },
-            { id: 'lugar_intervencion', label: 'Lugar' },
-            { id: 'nombre_agraviado', label: 'Agraviado' },
-            { id: 'hora_acta', label: 'Hora Acta' }
-        ];
-
-        container.innerHTML = fields.map(f => `
-            <div class="field-group">
-                <label style="color:var(--primary)">${f.label}</label>
-                <input type="text" id="edit_${f.id}" value="${document.getElementById(f.id).value.toUpperCase()}">
-            </div>
-        `).join('');
-
+        container.innerHTML = `
+            <div class="field-group"><label>Fiscalía</label><input type="text" id="edit_num_fiscalia" value="${document.getElementById('num_fiscalia').value}"></div>
+            <div class="field-group"><label>Fiscal Resp.</label><input type="text" id="edit_fiscal_responsable" value="${fiscalVal.toUpperCase()}"></div>
+            <div class="field-group"><label>Delito</label><input type="text" id="edit_delito" value="${document.getElementById('delito').value.toUpperCase()}"></div>
+            <div class="field-group"><label>Lugar</label><input type="text" id="edit_lugar_intervencion" value="${document.getElementById('lugar_intervencion').value.toUpperCase()}"></div>
+        `;
         document.getElementById('modalResumen').style.display = 'flex';
         document.getElementById('btnFinalizarDescarga').onclick = ejecutarConAnimacion;
     }
 
     function cerrarResumen() { document.getElementById('modalResumen').style.display = 'none'; }
 
-    // ANIMACIÓN DE CARGA DECORATIVA CON VARIOS MENSAJES
     async function ejecutarConAnimacion() {
-        // Actualizar valores del form principal con lo editado en el resumen
-        document.getElementById('num_fiscalia').value = document.getElementById('edit_num_fiscalia').value;
-        document.getElementById('fiscal_responsable').value = document.getElementById('edit_fiscal_responsable').value;
-        document.getElementById('delito').value = document.getElementById('edit_delito').value;
-        document.getElementById('lugar_intervencion').value = document.getElementById('edit_lugar_intervencion').value;
-        document.getElementById('nombre_agraviado').value = document.getElementById('edit_nombre_agraviado').value;
-
+        // Guardar cambios del modal a los campos ocultos o principales si es necesario
         cerrarResumen();
         const overlay = document.getElementById('loader-overlay');
         const status = document.getElementById('loader-status');
         const bar = document.getElementById('progress-bar');
-        
         overlay.style.display = 'flex';
         
         const mensajes = [
@@ -284,10 +286,9 @@
         for (const m of mensajes) {
             status.innerText = m.t;
             bar.style.width = m.p + "%";
-            await new Promise(r => setTimeout(r, 800));
+            await new Promise(r => setTimeout(r, 600));
         }
 
-        // Ejecutar descarga real
         if (currentTarget === 'acta') await descargarWord('MODELO_DOS.docx', 'RECEPCION');
         if (currentTarget === 'tabla') await descargarWord('MODELO_WORD_TABLA.docx', 'TABLA');
         if (currentTarget === 'excel') descargarExcel();
@@ -302,20 +303,17 @@
         let lista = [];
         n.forEach((input, i) => {
             if(input.value.trim()) {
-                lista.push({ 
-                    num: i+1, 
-                    nombre: input.value.toUpperCase(), 
-                    dni: d[i].value || "---", 
-                    edad: e[i].value || "---" 
-                });
+                lista.push({ num: i+1, nombre: input.value.toUpperCase(), dni: d[i].value || "---", edad: e[i].value || "---" });
             }
         });
+
+        const fiscalFinal = document.getElementById('fiscal_responsable').value === "OTROS" ? document.getElementById('fiscal_otros').value : document.getElementById('fiscal_responsable').value;
 
         return {
             HORA: document.getElementById('hora_acta').value,
             FECHA: document.getElementById('fecha_acta').value,
             NUMERO_FISCALIA: document.getElementById('num_fiscalia').value,
-            FISCAL_RESPONSABLE: document.getElementById('fiscal_responsable').value.toUpperCase(),
+            FISCAL_RESPONSABLE: fiscalFinal.toUpperCase(),
             NOMBRE_PNP: document.getElementById('nombre_pnp').value.toUpperCase(),
             DNI_PNP: document.getElementById('dni_pnp').value,
             CELULAR_PNP: document.getElementById('celular_pnp').value,
@@ -337,26 +335,36 @@
         const data = obtenerDataFinal();
         try {
             const resp = await fetch(plantilla);
-            if(!resp.ok) throw new Error();
             const content = await resp.arrayBuffer();
             const zip = new PizZip(content);
             const doc = new window.docxtemplater(zip, { paragraphLoop: true, linebreaks: true });
             doc.render(data);
             const out = doc.getZip().generate({ type: "blob" });
             saveAs(out, `${prefijo}_${data.lista_detenidos[0]?.nombre || 'DOC'}.docx`);
-        } catch (e) {
-            alert(`Error: No se encontró la plantilla ${plantilla} en la carpeta.`);
-        }
+        } catch (e) { alert("Error con la plantilla Word."); }
     }
 
     function descargarExcel() {
         const data = obtenerDataFinal();
-        const ws = XLSX.utils.json_to_sheet(data.lista_detenidos);
+        // Encabezados informativos para el Excel Modelo
+        const infoGeneral = [
+            ["REPORTE DE ACTA TELEFÓNICA"],
+            ["FISCALÍA:", data.NUMERO_FISCALIA, "FISCAL:", data.FISCAL_RESPONSABLE],
+            ["DELITO:", data.DELITO, "FECHA:", data.FECHA],
+            ["UNIDAD PNP:", data.UNIDAD_PNP, "EFECTIVO:", data.NOMBRE_PNP],
+            [],
+            ["N°", "NOMBRE COMPLETO", "DNI", "EDAD"]
+        ];
+        
+        // Combinar info general con la lista de detenidos
+        const filasDetenidos = data.lista_detenidos.map(det => [det.num, det.nombre, det.dni, det.edad]);
+        const hojaData = infoGeneral.concat(filasDetenidos);
+
+        const ws = XLSX.utils.aoa_to_sheet(hojaData);
         const wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, "Detenidos");
+        XLSX.utils.book_append_sheet(wb, ws, "Resumen");
         XLSX.writeFile(wb, `EXCEL_MODELO_${data.lista_detenidos[0]?.nombre || 'REPORTE'}.xlsx`);
     }
 </script>
-
 </body>
 </html>
