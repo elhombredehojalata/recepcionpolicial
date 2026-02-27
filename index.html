@@ -38,7 +38,7 @@
         label { font-size: 0.7rem; font-weight: 700; color: var(--label); margin-bottom: 5px; text-transform: uppercase; }
         input, select, textarea { width: 100%; padding: 12px; border-radius: 10px; border: 2px solid var(--border); background: #0f172a; color: white; font-size: 0.95rem; }
         .detenido-card { background: rgba(255,255,255,0.03); padding: 20px; border-radius: 15px; margin-bottom: 10px; border: 1px solid var(--border); position: relative; }
-        .btn-add { background: transparent; color: var(--primary); border: 2px dashed var(--primary); padding: 12px; width: 100%; border-radius: 12px; cursor: pointer; font-weight: 800; }
+        .btn-add { background: transparent; color: var(--primary); border: 2px dashed var(--primary); padding: 12px; width: 100%; border-radius: 12px; cursor: pointer; font-weight: 800; margin-bottom: 20px; }
         .download-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-top: 30px; }
         .btn-dl { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 18px; border-radius: 12px; border: none; cursor: pointer; color: white; font-weight: 800; text-transform: uppercase; font-size: 0.85rem; }
         .btn-acta { background: var(--word); }
@@ -95,7 +95,6 @@
         <option value="DRA. MARÍA ANGÉLICA LAZO ALBURQUEQUE" style="font-weight: bold;">DRA. MARÍA ANGÉLICA LAZO ALBURQUEQUE</option>
         <option value="DRA. SARA RUTH YARLEQUÉ ADRIANZÉN" style="font-weight: bold;" selected>DRA. SARA RUTH YARLEQUÉ ADRIANZÉN</option>
         <option value="DRA. MARISOL RODRÍGUEZ CHERO" style="font-weight: bold;">DRA. MARISOL RODRÍGUEZ CHERO</option>
-        
         <option value="DRA. KAREN YESSENIA GUERRERO PEÑA">DRA. KAREN YESSENIA GUERRERO PEÑA</option>
         <option value="DRA. MARIANELLA WONG CARDOZA">DRA. MARIANELLA WONG CARDOZA</option>
         <option value="DRA. YERALDINE PRISCILA POZO CORDOVA">DRA. YERALDINE PRISCILA POZO CORDOVA</option>
@@ -107,7 +106,6 @@
         <option value="DR. EDMUND ANTENOR ALIAGA RIVERA">DR. EDMUND ANTENOR ALIAGA RIVERA</option>
         <option value="DRA. CARMEN GUILIANA MURGUIA SUAREZ">DRA. CARMEN GUILIANA MURGUIA SUAREZ</option>
         <option value="DR. JAIR ALEJANDRO CASTILLO GUERRERO">DR. JAIR ALEJANDRO CASTILLO GUERRERO</option>
-        
         <option value="OTROS">➕ OTRO FISCAL (ESPECIFICAR)...</option>
     </select>
     <input type="text" id="fiscal_otros" style="display:none; margin-top:10px;" placeholder="Escriba el nombre del Fiscal...">
@@ -177,13 +175,24 @@
         </div>
         <button type="button" class="btn-add" onclick="agregarDetenido()">➕ AGREGAR OTRO DETENIDO</button>
 
-        <div class="section-title">🚨 4. Detalles de la Intervención</div>
+        <div class="section-title">👤 4. Datos de los Agraviados</div>
+        <div id="contenedor_agraviados">
+            <div class="detenido-card">
+                <div class="grid-3">
+                    <div class="field-group"><label>Nombre Agraviado</label><input type="text" class="agraviado_nombre"></div>
+                    <div class="field-group"><label>DNI / DOC</label><input type="text" class="agraviado_dni"></div>
+                    <div class="field-group"><label>Edad</label><input type="number" class="agraviado_edad"></div>
+                </div>
+            </div>
+        </div>
+        <button type="button" class="btn-add" onclick="agregarAgraviado()">➕ AGREGAR OTRO AGRAVIADO</button>
+
+        <div class="section-title">🚨 5. Detalles de la Intervención</div>
         <div class="grid-3">
             <div class="field-group"><label>Delito</label><input type="text" id="delito"></div>
             <div class="field-group"><label>Hora Int.</label><input type="time" id="hora_intervencion"></div>
-            <div class="field-group"><label>Nombre Agraviado</label><input type="text" id="nombre_agraviado"></div>
+            <div class="field-group"><label>Lugar de Intervención</label><input type="text" id="lugar_intervencion"></div>
         </div>
-        <div class="field-group"><label>Lugar de Intervención</label><input type="text" id="lugar_intervencion"></div>
 
         <input type="checkbox" id="check_arresto" hidden onchange="toggleArrestoVisual()">
         <label for="check_arresto" class="option-card" id="arresto_card">
@@ -205,7 +214,7 @@
             </div>
         </div>
 
-        <div class="section-title">🏁 5. Cierre</div>
+        <div class="section-title">🏁 6. Cierre</div>
         <div class="field-group"><label>Hora de Cierre del Acta</label><input type="time" id="hora_cierre"></div>
 
         <div class="download-grid">
@@ -253,6 +262,16 @@
         div.id = `bloque_${id}`;
         div.innerHTML = `<button type="button" class="btn-remove" onclick="document.getElementById('bloque_${id}').remove()">✕</button><div class="grid-3"><div class="field-group"><label>Nombre Completo</label><input type="text" class="detenido_nombre"></div><div class="field-group"><label>DNI / DOC</label><input type="text" class="detenido_dni"></div><div class="field-group"><label>Edad</label><input type="number" class="detenido_edad"></div></div>`;
         document.getElementById('contenedor_detenidos').appendChild(div);
+    }
+
+    // NUEVA FUNCION PARA AGREGAR AGRAVIADOS
+    function agregarAgraviado() {
+        const id = Date.now();
+        const div = document.createElement('div');
+        div.className = 'detenido-card';
+        div.id = `agrav_${id}`;
+        div.innerHTML = `<button type="button" class="btn-remove" onclick="document.getElementById('agrav_${id}').remove()">✕</button><div class="grid-3"><div class="field-group"><label>Nombre Agraviado</label><input type="text" class="agraviado_nombre"></div><div class="field-group"><label>DNI / DOC</label><input type="text" class="agraviado_dni"></div><div class="field-group"><label>Edad</label><input type="number" class="agraviado_edad"></div></div>`;
+        document.getElementById('contenedor_agraviados').appendChild(div);
     }
 
     function toggleArrestoVisual() {
@@ -307,6 +326,7 @@
     }
 
     function obtenerDataFinal() {
+        // Capturar Detenidos
         const n = document.querySelectorAll('.detenido_nombre');
         const d = document.querySelectorAll('.detenido_dni');
         const e = document.querySelectorAll('.detenido_edad');
@@ -314,6 +334,22 @@
         n.forEach((input, i) => {
             if(input.value.trim()) {
                 lista.push({ num: i+1, nombre: input.value.toUpperCase(), dni: d[i].value || "---", edad: e[i].value || "---" });
+            }
+        });
+
+        // Capturar Agraviados (NUEVO)
+        const an = document.querySelectorAll('.agraviado_nombre');
+        const ad = document.querySelectorAll('.agraviado_dni');
+        const ae = document.querySelectorAll('.agraviado_edad');
+        let lista_agraviados = [];
+        an.forEach((input, i) => {
+            if(input.value.trim()) {
+                lista_agraviados.push({ 
+                    num: i+1, 
+                    nombre_agraviado: input.value.toUpperCase(), 
+                    dni_agraviado: ad[i].value || "---", 
+                    edad_agraviado: ae[i].value || "---" 
+                });
             }
         });
 
@@ -331,7 +367,8 @@
             DELITO: document.getElementById('delito').value.toUpperCase(),
             LUGAR_INTERVENCION: document.getElementById('lugar_intervencion').value.toUpperCase(),
             lista_detenidos: lista,
-            NOMBRE_AGRAVIADO: document.getElementById('nombre_agraviado').value.toUpperCase(),
+            lista_agraviados: lista_agraviados, // SE ENVÍA LA LISTA AL WORD
+            NOMBRE_AGRAVIADO: lista_agraviados.length > 0 ? lista_agraviados[0].nombre_agraviado : "---", // Para el Excel enviamos el primero
             HORA_INTERVENCION: document.getElementById('hora_intervencion').value,
             es_arresto_ciudadano: document.getElementById('check_arresto').checked,
             NOMBRE_CIUDADANO: document.getElementById('nombre_ciudadano').value.toUpperCase(),
@@ -354,7 +391,6 @@
         } catch (e) { alert("Error con la plantilla Word."); }
     }
 
-    // NUEVA FUNCION DE EXCEL INTEGRADA BASADA EN TU MODELO EXCEL_UNO
     async function descargarExcel() {
         const data = obtenerDataFinal();
         const nombreArchivoModelo = "EXCEL_UNO.xlsx"; 
@@ -379,20 +415,20 @@
             const nuevasFilas = data.lista_detenidos.map(det => {
                 const fiscalLimpio = data.FISCAL_RESPONSABLE.replace(/DR\.|DRA\./g, "").trim().toUpperCase();
                 return [
-                    fiscalLimpio,                 // A: Fiscal Responsable
-                    data.FECHA,                   // B: Fecha de Detención
-                    data.HORA_INTERVENCION,       // C: Hora de Detención
-                    data.LUGAR_INTERVENCION,      // D: Lugar del hecho
-                    data.UNIDAD_PNP,              // E: Comisaría reportante
-                    data.NOMBRE_PNP,              // F: PNP reportante
-                    data.DNI_PNP,                 // G: DNI PNP
-                    det.nombre.toUpperCase(),     // H: Nombre de Detenido
-                    det.dni,                      // I: DNI detenido
-                    det.edad,                     // J: Edad
-                    data.lista_detenidos.length,  // K: # Personas Detenidas
-                    data.DELITO.toUpperCase(),    // L: Delito
-                    "", "", "", "",               // M, N, O, P (Vacios)
-                    data.NOMBRE_AGRAVIADO.toUpperCase() // Q: Agraviado
+                    fiscalLimpio,
+                    data.FECHA,
+                    data.HORA_INTERVENCION,
+                    data.LUGAR_INTERVENCION,
+                    data.UNIDAD_PNP,
+                    data.NOMBRE_PNP,
+                    data.DNI_PNP,
+                    det.nombre.toUpperCase(),
+                    det.dni,
+                    det.edad,
+                    data.lista_detenidos.length,
+                    data.DELITO.toUpperCase(),
+                    "", "", "", "",
+                    data.NOMBRE_AGRAVIADO.toUpperCase()
                 ];
             });
 
