@@ -41,7 +41,7 @@
         .detenido-card { background: rgba(255,255,255,0.03); padding: 20px; border-radius: 15px; margin-bottom: 10px; border: 1px solid var(--border); position: relative; }
         .btn-add { background: transparent; color: var(--primary); border: 2px dashed var(--primary); padding: 12px; width: 100%; border-radius: 12px; cursor: pointer; font-weight: 800; margin-bottom: 20px; }
         .download-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-top: 30px; }
-        .btn-dl { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 18px; border-radius: 12px; border: none; cursor: pointer; color: white; font-weight: 800; text-transform: uppercase; font-size: 0.85rem; }
+        .btn-dl { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 18px; border-radius: 12px; border: none; cursor: pointer; color: white; font-weight: 800; text-transform: uppercase; font-size: 0.85rem; text-align: center; }
         .btn-acta { background: var(--word); }
         .btn-tabla { background: #4f46e5; }
         .btn-excel { background: var(--excel); }
@@ -193,7 +193,13 @@
 
         <div class="section-title">🚨 5. Detalles de la Intervención</div>
         <div class="grid-3">
-            <div class="field-group"><label>Delito</label><input type="text" id="delito"></div>
+            <div class="field-group">
+                <label>Delito</label>
+                <input type="text" id="delito" list="lista-delitos" autocomplete="off" placeholder="Escriba para buscar...">
+                <datalist id="lista-delitos">
+                    <option value="ROBO SIMPLE"></option><option value="ROBO AGRAVADO"></option><option value="HURTO SIMPLE"></option><option value="HURTO AGRAVADO"></option><option value="RECEPTACIÓN"></option><option value="EXTORSIÓN"></option><option value="SECUESTRO"></option><option value="LESIONES LEVES"></option><option value="LESIONES GRAVES"></option><option value="LESIONES GRAVÍSIMAS"></option><option value="HOMICIDIO SIMPLE"></option><option value="HOMICIDIO CALIFICADO"></option><option value="PARRICIDIO"></option><option value="FEMINICIDIO"></option><option value="HOMICIDIO CULPOSO"></option><option value="ABANDONO DE PERSONA EN PELIGRO"></option><option value="VIOLENCIA FÍSICA"></option><option value="VIOLENCIA PSICOLÓGICA"></option><option value="VIOLENCIA FAMILIAR"></option><option value="VIOLACIÓN SEXUAL DE MENOR"></option><option value="VIOLACIÓN SEXUAL"></option><option value="ACTOS CONTRA EL PUDOR"></option><option value="TOCAMIENTOS INDEBIDOS"></option><option value="EXPLOTACIÓN SEXUAL"></option><option value="PORNOGRAFÍA INFANTIL"></option><option value="PROXENETISMO"></option><option value="CLIENTE DE PROSTITUCIÓN INFANTIL"></option><option value="TRATA DE PERSONAS"></option><option value="ACOSO SEXUAL"></option><option value="CHANTAJE SEXUAL"></option><option value="ABUSO DE AUTORIDAD"></option><option value="OMISIÓN DE ACTOS FUNCIONALES"></option><option value="COHECHO PASIVO PROPIO"></option><option value="COHECHO PASIVO IMPROPIO"></option><option value="COHECHO ACTIVO"></option><option value="COLUSIÓN SIMPLE"></option><option value="COLUSIÓN AGRAVADA"></option><option value="PECULADO"></option><option value="PECULADO DOLOSO"></option><option value="PECULADO CULPOSO"></option><option value="MALVERSACIÓN"></option><option value="CONCUSIÓN"></option><option value="NEGOCIACIÓN INCOMPATIBLE"></option><option value="FRAUDE EN LA ADMINISTRACIÓN DE PERSONAS JURÍDICAS"></option><option value="TRÁFICO DE INFLUENCIAS"></option><option value="ENRIQUECIMIENTO ILÍCITO"></option><option value="FALSIFICACIÓN DE DOCUMENTOS"></option><option value="FALSIFICACIÓN DE DOCUMENTOS PRIVADOS"></option><option value="FALSA DECLARACIÓN EN PROCEDIMIENTO ADMINISTRATIVO"></option><option value="FALSIFICACIÓN DE SELLOS Y TIMBRES"></option><option value="FALSIFICACIÓN DE MONEDA"></option><option value="FALSIFICACIÓN DE BILLETES"></option><option value="FALSIFICACIÓN DE TARJETAS DE CRÉDITO"></option><option value="FALSIFICACIÓN DE NUMERARIO"></option><option value="USO DE DOCUMENTO FALSO"></option><option value="FALSEDAD IDEOLÓGICA"></option><option value="FALSEDAD MATERIAL"></option><option value="FALSEDAD GENÉRICA"></option><option value="FRAUDE PROCESAL"></option><option value="ESTELIONATO"></option><option value="LAVADO DE ACTIVOS"></option><option value="FINANCIAMIENTO DEL TERRORISMO"></option><option value="ASOCIACIÓN ILÍCITA"></option><option value="ORGANIZACIÓN CRIMINAL"></option><option value="USURPACIÓN"></option><option value="USURPACIÓN AGRAVADA"></option><option value="ESTAFA"></option><option value="ESTAFA AGRAVADA"></option><option value="APROPIACIÓN ILÍCITA"></option><option value="DEFRAUDACIÓN TRIBUTARIA"></option><option value="CONTRABANDO"></option><option value="TRÁFICO ILÍCITO DE DROGAS"></option><option value="MICROCOMERCIALIZACIÓN DE DROGAS"></option><option value="POSESIÓN DE DROGAS CON FINES DE TRÁFICO"></option><option value="PROMOCIÓN AL CONSUMO DE DROGAS"></option><option value="TENENCIA ILEGAL DE ARMAS"></option><option value="PORTACIÓN ILEGAL DE ARMAS"></option><option value="FABRICACIÓN ILEGAL DE ARMAS"></option><option value="TRÁFICO ILÍCITO DE ARMAS"></option><option value="CONDUCCIÓN EN ESTADO DE EBRIEDAD"></option><option value="CONDUCCIÓN EN ESTADO DE DROGADICCIÓN"></option><option value="OMISIÓN A LA ASISTENCIA FAMILIAR"></option><option value="ABANDONO DE NIÑO"></option><option value="EXPOSICIÓN A PELIGRO"></option><option value="RESISTENCIA A LA AUTORIDAD"></option><option value="VIOLENCIA CONTRA LA AUTORIDAD"></option><option value="DESOBEDIENCIA A LA AUTORIDAD"></option><option value="ATENTADO CONTRA LA AUTORIDAD"></option><option value="ENCUBRIMIENTO PERSONAL"></option><option value="ENCUBRIMIENTO REAL"></option><option value="DENUNCIA CALUMNIOSA"></option><option value="AUTOENCUBRIMIENTO"></option><option value="MOTÍN"></option><option value="DISTURBIOS"></option><option value="ATENTADO CONTRA LA SEGURIDAD PÚBLICA"></option><option value="PELIGRO COMÚN"></option><option value="INCENDIO"></option><option value="EXPLOSIONES"></option><option value="ESTRAGOS"></option><option value="CONTAMINACIÓN AMBIENTAL"></option><option value="TRÁFICO ILÍCITO DE RESIDUOS PELIGROSOS"></option><option value="MINERÍA ILEGAL"></option><option value="TALA ILEGAL"></option><option value="DEPREDACIÓN DE FAUNA SILVESTRE"></option><option value="DEPREDACIÓN DE FLORA"></option><option value="DELITOS CONTRA BOSQUES"></option><option value="DELITOS CONTRA LOS RECURSOS NATURALES"></option><option value="PESCA ILEGAL"></option><option value="DELITOS INFORMÁTICOS"></option><option value="FRAUDE INFORMÁTICO"></option><option value="ACCESO ILÍCITO A SISTEMAS INFORMÁTICOS"></option><option value="INTERCEPTACIÓN DE DATOS"></option><option value="INTERCEPTACIÓN DE COMUNICACIONES"></option><option value="VIOLACIÓN DE CORRESPONDENCIA"></option><option value="VIOLACIÓN DE SECRETO PROFESIONAL"></option><option value="VIOLACIÓN DE DATOS PERSONALES"></option><option value="OBSTRUCCIÓN A LA JUSTICIA"></option><option value="OMISIÓN DE DENUNCIA"></option><option value="PATROCINIO ILEGAL"></option><option value="LITIGACIÓN MALICIOSA"></option><option value="ABANDONO DE FUNCIONES"></option><option value="SUPLANTACIÓN DE IDENTIDAD"></option><option value="ABUSO DE DOCUMENTOS DE IDENTIDAD"></option><option value="FALSEDAD EN INFORMACIÓN DE REGISTROS"></option><option value="BIGAMIA"></option><option value="POLIGAMIA"></option><option value="OMISIÓN DE PRESTACIÓN DE ALIMENTOS"></option><option value="ALTERACIÓN DE LINDEROS"></option><option value="PERTURBACIÓN DE POSESIÓN"></option><option value="COACCIÓN"></option><option value="AMENAZAS"></option><option value="CHANTAJE"></option><option value="CALUMNIA"></option><option value="DIFAMACIÓN"></option><option value="INJURIA"></option><option value="PROPAGACIÓN DE ENFERMEDADES PELIGROSAS"></option><option value="CONTAMINACIÓN DE AGUA"></option><option value="PROPAGACIÓN DE EPIDEMIAS"></option><option value="COMERCIALIZACIÓN DE PRODUCTOS NOCIVOS"></option><option value="ADULTERACIÓN DE ALIMENTOS"></option><option value="TRÁFICO ILÍCITO DE BIENES CULTURALES"></option><option value="DAÑOS SIMPLES"></option><option value="DAÑOS AGRAVADOS"></option><option value="VIOLACIÓN DE MEDIDAS SANITARIAS"></option><option value="ALTERACIÓN DE EVIDENCIAS"></option><option value="SUSTRACCIÓN DE MENORES"></option><option value="VIOLACIÓN A LA INTIMIDAD"></option><option value="OMISIÓN DE SOCORRO"></option><option value="ATENTADO CONTRA LA INTEGRIDAD DE INFRAESTRUCTURA"></option><option value="ACTOS TERRORISTAS"></option><option value="COLABORACIÓN CON EL TERRORISMO"></option><option value="APOLOGÍA DEL TERRORISMO"></option><option value="PELIGRO POR MEDIOS DE TRANSPORTE"></option><option value="SABOTAJE"></option><option value="OBSTACULIZACIÓN DE SERVICIOS PÚBLICOS"></option><option value="ALTERACIÓN DEL ORDEN PÚBLICO"></option><option value="PERTURBACIÓN DE SERVICIOS ESENCIALES"></option><option value="DESOBEDIENCIA A LA AUTORIDAD"></option><option value="RESISTENCIA A LA AUTORIDAD"></option><option value="VIOLENCIA CONTRA LA AUTORIDAD"></option><option value="ATENTADO CONTRA LA AUTORIDAD"></option><option value="OBSTRUCCIÓN AL EJERCICIO DE FUNCIONES"></option><option value="DESACATO"></option><option value="QUEBRANTAMIENTO DE CONDENA"></option><option value="QUEBRANTAMIENTO DE MEDIDAS DE PROTECCIÓN"></option><option value="QUEBRANTAMIENTO DE RÉGIMEN DE VISITAS"></option><option value="INCUMPLIMIENTO DE MANDATO JUDICIAL"></option><option value="INCUMPLIMIENTO DE MEDIDAS DE SEGURIDAD"></option><option value="OMISIÓN DE ACATAR DISPOSICIÓN LEGAL"></option>
+                </datalist>
+            </div>
             <div class="field-group"><label>Hora Int.</label><input type="time" id="hora_intervencion"></div>
             <div class="field-group"><label>Lugar de Intervención</label><input type="text" id="lugar_intervencion"></div>
         </div>
@@ -222,17 +228,17 @@
         <div class="field-group"><label>Hora de Cierre del Acta</label><input type="time" id="hora_cierre"></div>
 
         <div class="download-grid">
-            <button type="button" class="btn-dl btn-gsheets" onclick="enviarAGoogleSheets()">☁️ SUBIR A GOOGLE SHEETS</button>
-            <button type="button" class="btn-dl btn-acta" onclick="abrirResumen('acta')">📄 ACTA PRINCIPAL (WORD)</button>
-            <button type="button" class="btn-dl btn-tabla" onclick="abrirResumen('tabla')">📋 TABLA DETENIDOS (WORD)</button>
-            <button type="button" class="btn-dl btn-excel" onclick="abrirResumen('excel')">📊 REPORTE EXCEL (MODELO)</button>
+            <button type="button" class="btn-dl btn-acta" onclick="abrirResumen('acta')">📄 DESCARGAR ACTA WORD</button>
+            <button type="button" class="btn-dl btn-tabla" onclick="abrirResumen('tabla')">📋 DESCARGAR TABLA RESUMEN</button>
+            <button type="button" class="btn-dl btn-gsheets" onclick="confirmarSubida()">☁️ SUBIR DATOS AL SERVIDOR</button>
+            <button type="button" class="btn-dl btn-excel" onclick="abrirResumen('excel')">📊 DESCARGAR EXCEL LOCAL</button>
         </div>
     </form>
 </div>
 
 <div id="modalResumen" class="modal">
     <div class="modal-content">
-        <h2 style="color:var(--primary); margin-top:0; font-weight:800">EDITAR ANTES DE GENERAR</h2>
+        <h2 style="color:var(--primary); margin-top:0; font-weight:800" id="tituloModal">EDITAR ANTES DE GENERAR</h2>
         <div class="edit-grid" id="edit-fields-container"></div>
         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; margin-top:25px;">
             <button class="btn-add" style="border-style:solid; border-color:var(--border); color:var(--text)" onclick="cerrarResumen()">CANCELAR</button>
@@ -290,6 +296,7 @@
         const container = document.getElementById('edit-fields-container');
         const fiscalVal = document.getElementById('fiscal_responsable').value === "OTROS" ? document.getElementById('fiscal_otros').value : document.getElementById('fiscal_responsable').value;
         
+        document.getElementById('tituloModal').innerText = "EDITAR ANTES DE GENERAR";
         container.innerHTML = `
             <div class="field-group"><label>Fiscalía</label><input type="text" id="edit_num_fiscalia" value="${document.getElementById('num_fiscalia').value}"></div>
             <div class="field-group"><label>Fiscal Resp.</label><input type="text" id="edit_fiscal_responsable" value="${fiscalVal.toUpperCase()}"></div>
@@ -297,7 +304,39 @@
             <div class="field-group"><label>Lugar</label><input type="text" id="edit_lugar_intervencion" value="${document.getElementById('lugar_intervencion').value.toUpperCase()}"></div>
         `;
         document.getElementById('modalResumen').style.display = 'flex';
-        document.getElementById('btnFinalizarDescarga').onclick = ejecutarConAnimacion;
+        const btnFinalizar = document.getElementById('btnFinalizarDescarga');
+        btnFinalizar.innerText = "CONFIRMAR Y DESCARGAR";
+        btnFinalizar.onclick = ejecutarConAnimacion;
+    }
+
+    // NUEVA FUNCION PARA REVISAR ANTES DE SUBIR
+    function confirmarSubida() {
+        const data = obtenerDataFinal();
+        
+        if (data.lista_detenidos.length === 0) {
+            alert("⚠️ No hay detenidos para registrar. Por favor agrega al menos uno.");
+            return;
+        }
+
+        const container = document.getElementById('edit-fields-container');
+        document.getElementById('tituloModal').innerText = "VERIFICA ANTES DE SUBIR";
+        
+        // Mostramos un resumen limpio no editable (o editable si quisieras, pero de momento es un resumen de confirmación)
+        container.innerHTML = `
+            <div class="field-group"><label>Fecha y Hora</label><input type="text" readonly value="${data.FECHA} - ${data.HORA}"></div>
+            <div class="field-group"><label>Fiscal Responsable</label><input type="text" readonly value="${data.FISCAL_RESPONSABLE}"></div>
+            <div class="field-group"><label>Delito</label><input type="text" readonly value="${data.DELITO}"></div>
+            <div class="field-group"><label>Total Detenidos</label><input type="text" readonly value="${data.lista_detenidos.length} detenido(s)"></div>
+        `;
+        
+        document.getElementById('modalResumen').style.display = 'flex';
+        
+        const btnFinalizar = document.getElementById('btnFinalizarDescarga');
+        btnFinalizar.innerText = "SÍ, ESTÁ CORRECTO. SUBIR";
+        btnFinalizar.onclick = function() {
+            cerrarResumen();
+            enviarAGoogleSheets();
+        };
     }
 
     function cerrarResumen() { document.getElementById('modalResumen').style.display = 'none'; }
@@ -450,12 +489,7 @@
 
     async function enviarAGoogleSheets() {
         const data = obtenerDataFinal();
-        const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbzOzTUSOfafoweMEff_aisETfBA4so51SbmtQpZfPsYo2HJn09vkt02Uo2VHpPOO4VM/exec";
-
-        if (data.lista_detenidos.length === 0) {
-            alert("⚠️ No hay detenidos para registrar.");
-            return;
-        }
+        const URL_SCRIPT = "https://script.google.com/macros/s/AKfycby8t6iFeMPQv4im1pqb3AteXY6mbeV-EsDK3g9_6-inszyrB5jkPYjTIbjK_A7K0BtX/exec";
 
         const overlay = document.getElementById('loader-overlay');
         const status = document.getElementById('loader-status');
@@ -479,7 +513,7 @@
             status.innerHTML = "✅ ¡INFORMACIÓN SUBIDA EXITOSAMENTE!";
             link.style.display = 'block';
             
-            // Mantenemos el mensaje visible 4 segundos antes de cerrar automáticamente
+            // Mantenemos el mensaje visible 6 segundos antes de cerrar automáticamente
             setTimeout(() => {
                 overlay.style.display = 'none';
                 bar.style.width = "0%";
