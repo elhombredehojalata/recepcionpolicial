@@ -4,36 +4,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Acta de Recepción telefónica- PROYECTO OMAR</title>
-    
+    <title>Acta de Recepción telefónica - PROYECTO OMAR</title>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/docxtemplater/3.28.5/docxtemplater.js"></script>
     <script src="https://unpkg.com/pizzip@3.1.1/dist/pizzip.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-    
+
     <style>
         :root {
-            --bg: #020617; 
-            --card: #1e293b; 
-            --text: #f8fafc; 
+            --bg: #020617;
+            --card: #1e293b;
+            --text: #f8fafc;
             --primary: #60a5fa;
-            --success: #10b981; 
-            --border: #334155; 
-            --label: #94a3b8; 
-            --accent: #1e293b;
-            --danger: #ef4444; 
-            --excel: #16a34a; 
+            --success: #10b981;
+            --border: #334155;
+            --label: #94a3b8;
+            --danger: #ef4444;
             --word: #2563eb;
             --gsheets: #0f9d58;
+            --warn: #f59e0b;
         }
 
         * { box-sizing: border-box; transition: all 0.2s ease; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+
+        /* ── APP CONTAINER ── */
         .app-container { width: 100%; max-width: 900px; background: var(--card); padding: 40px; border-radius: 24px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); margin: 20px 0; border: 1px solid var(--border); }
         .header { text-align: center; margin-bottom: 35px; }
         h1 { font-size: 1.5rem; color: var(--primary); margin: 0; font-weight: 800; text-transform: uppercase; }
-        .subtitle { font-size: 0.75rem; color: var(--danger); font-weight: 800; margin-top: 10px; padding: 8px 15px; border: 1px solid var(--danger); border-radius: 6px; display: inline-block; text-transform: uppercase; background: rgba(239, 68, 68, 0.1); }
+        .subtitle { font-size: 0.75rem; color: var(--danger); font-weight: 800; margin-top: 10px; padding: 8px 15px; border: 1px solid var(--danger); border-radius: 6px; display: inline-block; text-transform: uppercase; background: rgba(239,68,68,0.1); }
         .section-title { font-size: 0.85rem; font-weight: 800; color: var(--primary); text-transform: uppercase; margin: 30px 0 15px 0; border-bottom: 2px solid var(--border); padding-bottom: 5px; }
         .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; }
         .field-group { display: flex; flex-direction: column; margin-bottom: 12px; }
@@ -43,62 +44,162 @@
         .btn-add { background: transparent; color: var(--primary); border: 2px dashed var(--primary); padding: 12px; width: 100%; border-radius: 12px; cursor: pointer; font-weight: 800; margin-bottom: 20px; }
         .download-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 30px; }
         .btn-dl { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 18px; border-radius: 12px; border: none; cursor: pointer; color: white; font-weight: 800; text-transform: uppercase; font-size: 0.85rem; }
-        .btn-acta { background: var(--word); }
-        .btn-tabla { background: #4f46e5; }
-        .btn-excel { background: var(--excel); }
-        .btn-gsheets { background: var(--gsheets); }
-        #loader-overlay { display: none; position: fixed; inset: 0; background: rgba(2, 6, 23, 0.95); z-index: 9999; flex-direction: column; align-items: center; justify-content: center; }
+        .btn-acta   { background: var(--word); }
+        .btn-tabla  { background: #4f46e5; }
+        .btn-gsheets{ background: var(--gsheets); }
+        .btn-remove { position: absolute; top: -10px; right: -10px; background: var(--danger); color: white; border: none; border-radius: 50%; width: 25px; height: 25px; cursor: pointer; z-index: 10; }
+        .option-card { background: #0f172a; border: 2px solid var(--border); padding: 15px; border-radius: 15px; margin: 20px 0; display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
+        .option-card.active { border-color: var(--success); background: rgba(16,185,129,0.05); }
+
+        /* ── LOADER ── */
+        #loader-overlay { display: none; position: fixed; inset: 0; background: rgba(2,6,23,0.95); z-index: 9999; flex-direction: column; align-items: center; justify-content: center; }
         .loader-box { width: 320px; text-align: center; }
         .loader-text { margin-bottom: 20px; font-weight: 700; color: var(--primary); min-height: 1.2em; text-transform: uppercase; letter-spacing: 1px; }
         .progress-container { width: 100%; height: 6px; background: #334155; border-radius: 10px; overflow: hidden; }
         .progress-bar { width: 0%; height: 100%; background: var(--primary); box-shadow: 0 0 15px var(--primary); transition: width 0.4s ease; }
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); z-index: 5000; align-items: center; justify-content: center; padding: 20px; }
-        .modal-content { background: var(--card); width: 100%; max-width: 650px; padding: 30px; border-radius: 20px; border: 1px solid var(--border); box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); }
-        .edit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; max-height: 60vh; overflow-y: auto; padding-right: 10px; }
-        .btn-remove { position: absolute; top: -10px; right: -10px; background: var(--danger); color: white; border: none; border-radius: 50%; width: 25px; height: 25px; cursor: pointer; z-index: 10; }
-        .option-card { background: #0f172a; border: 2px solid var(--border); padding: 15px; border-radius: 15px; margin: 20px 0; display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
-        .option-card.active { border-color: var(--success); background: rgba(16, 185, 129, 0.05); }
         #link-verificacion { color: var(--primary); text-decoration: underline; font-weight: bold; cursor: pointer; display: block; margin-top: 15px; font-size: 0.8rem; }
 
-        /* ── AUTOCOMPLETE DELITOS ── */
+        /* ── MODALES ── */
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); z-index: 5000; align-items: center; justify-content: center; padding: 20px; overflow-y: auto; }
+        .modal-content { background: var(--card); width: 100%; max-width: 650px; padding: 30px; border-radius: 20px; border: 1px solid var(--border); box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); }
+        .edit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; max-height: 60vh; overflow-y: auto; padding-right: 10px; }
+
+        /* ── AUTOCOMPLETE ── */
         .autocomplete-wrapper { position: relative; }
-        .autocomplete-list {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: #0f172a;
-            border: 2px solid var(--primary);
-            border-radius: 10px;
-            z-index: 1000;
-            max-height: 220px;
-            overflow-y: auto;
-            margin-top: 4px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-        .autocomplete-list div {
-            padding: 10px 14px;
-            cursor: pointer;
-            font-size: 0.88rem;
-            border-bottom: 1px solid var(--border);
-            transition: background 0.15s;
-        }
+        .autocomplete-list { position: absolute; top: 100%; left: 0; right: 0; background: #0f172a; border: 2px solid var(--primary); border-radius: 10px; z-index: 1000; max-height: 220px; overflow-y: auto; margin-top: 4px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .autocomplete-list div { padding: 10px 14px; cursor: pointer; font-size: 0.88rem; border-bottom: 1px solid var(--border); }
         .autocomplete-list div:last-child { border-bottom: none; }
         .autocomplete-list div:hover, .autocomplete-list div.active-item { background: rgba(96,165,250,0.15); color: var(--primary); }
 
-        /* ── MODAL CONFIRMACIÓN SHEETS ── */
-        #modalConfirmarSheets .modal-content { max-width: 580px; }
-        .resumen-sheet { background: #0f172a; border-radius: 12px; padding: 18px; margin: 18px 0; border: 1px solid var(--border); }
-        .resumen-sheet .fila { display: flex; justify-content: space-between; padding: 7px 0; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
+        /* ── RESUMEN MODAL CONFIRMACIÓN SHEETS ── */
+        .resumen-sheet { background: #0f172a; border-radius: 12px; padding: 18px; margin: 18px 0; border: 1px solid var(--border); max-height: 50vh; overflow-y: auto; }
+        .resumen-sheet .fila { display: flex; justify-content: space-between; align-items: flex-start; padding: 7px 0; border-bottom: 1px solid var(--border); font-size: 0.85rem; gap: 10px; }
         .resumen-sheet .fila:last-child { border-bottom: none; }
-        .resumen-sheet .fila .clave { color: var(--label); font-weight: 700; text-transform: uppercase; font-size: 0.72rem; }
-        .resumen-sheet .fila .valor { color: var(--text); font-weight: 600; text-align: right; max-width: 60%; }
+        .resumen-sheet .fila .clave { color: var(--label); font-weight: 700; text-transform: uppercase; font-size: 0.72rem; white-space: nowrap; }
+        .resumen-sheet .fila .valor { color: var(--text); font-weight: 600; text-align: right; }
         .resumen-sheet .subtitulo-det { color: var(--primary); font-size: 0.75rem; font-weight: 800; text-transform: uppercase; margin: 12px 0 6px; }
-        .tag-det { display: inline-block; background: rgba(96,165,250,0.12); border: 1px solid var(--primary); color: var(--primary); border-radius: 6px; padding: 3px 10px; font-size: 0.78rem; margin: 3px 3px 3px 0; font-weight: 700; }
+        .tag-det { display: inline-block; background: rgba(96,165,250,0.12); border: 1px solid var(--primary); color: var(--primary); border-radius: 6px; padding: 3px 10px; font-size: 0.78rem; margin: 3px; font-weight: 700; }
+        .tag-agrav { background: rgba(245,158,11,0.1); border-color: var(--warn); color: var(--warn); }
+
+        /* ══════════════════════════════
+           HISTORIAL
+        ══════════════════════════════ */
+        /* Botón flotante historial */
+        #btn-historial-flotante {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 4000;
+            background: linear-gradient(135deg, #1e40af, #60a5fa);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 14px 22px;
+            font-weight: 800;
+            font-size: 0.85rem;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(96,165,250,0.4);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        #btn-historial-flotante:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(96,165,250,0.55); }
+        .hist-badge {
+            background: var(--danger);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 0.7rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+        }
+
+        /* Modal historial */
+        #modalHistorial .modal-content { max-width: 780px; max-height: 90vh; display: flex; flex-direction: column; padding: 0; overflow: hidden; }
+        .hist-header { padding: 24px 28px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+        .hist-header h2 { margin: 0; color: var(--primary); font-size: 1.1rem; font-weight: 800; }
+        .hist-body { overflow-y: auto; padding: 20px 28px; flex: 1; }
+        .hist-empty { text-align: center; color: var(--label); padding: 50px 0; font-size: 0.9rem; }
+        .hist-empty span { font-size: 3rem; display: block; margin-bottom: 12px; }
+
+        /* Tarjeta de registro en historial */
+        .hist-card {
+            background: #0f172a;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            margin-bottom: 14px;
+            overflow: hidden;
+            transition: border-color 0.2s;
+        }
+        .hist-card:hover { border-color: var(--primary); }
+        .hist-card-header {
+            padding: 14px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            gap: 10px;
+        }
+        .hist-card-header:hover { background: rgba(96,165,250,0.05); }
+        .hist-card-meta { flex: 1; min-width: 0; }
+        .hist-card-title { font-weight: 800; font-size: 0.9rem; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .hist-card-sub { font-size: 0.72rem; color: var(--label); margin-top: 3px; }
+        .hist-card-badges { display: flex; gap: 6px; flex-shrink: 0; align-items: center; }
+        .badge { padding: 3px 9px; border-radius: 20px; font-size: 0.68rem; font-weight: 800; text-transform: uppercase; }
+        .badge-delito { background: rgba(239,68,68,0.15); color: #fca5a5; border: 1px solid rgba(239,68,68,0.3); max-width: 130px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .badge-n { background: rgba(96,165,250,0.15); color: var(--primary); border: 1px solid rgba(96,165,250,0.3); }
+        .hist-chevron { color: var(--label); font-size: 0.8rem; transition: transform 0.25s; }
+        .hist-chevron.open { transform: rotate(180deg); }
+
+        /* Detalle expandible */
+        .hist-card-detail { display: none; border-top: 1px solid var(--border); padding: 18px; }
+        .hist-card-detail.open { display: block; }
+        .detail-section { margin-bottom: 16px; }
+        .detail-section-title { font-size: 0.7rem; font-weight: 800; color: var(--primary); text-transform: uppercase; margin-bottom: 10px; padding-bottom: 4px; border-bottom: 1px solid var(--border); }
+        .detail-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px; }
+        .detail-field { background: rgba(255,255,255,0.03); border-radius: 8px; padding: 10px 12px; cursor: pointer; position: relative; border: 1px solid transparent; }
+        .detail-field:hover { border-color: var(--primary); background: rgba(96,165,250,0.06); }
+        .detail-field:hover::after { content: '📋 COPIAR'; position: absolute; top: 6px; right: 8px; font-size: 0.6rem; color: var(--primary); font-weight: 800; }
+        .detail-field .df-label { font-size: 0.65rem; font-weight: 700; color: var(--label); text-transform: uppercase; margin-bottom: 3px; }
+        .detail-field .df-value { font-size: 0.85rem; font-weight: 600; color: var(--text); word-break: break-word; }
+        .det-person { background: rgba(96,165,250,0.07); border: 1px solid rgba(96,165,250,0.2); border-radius: 10px; padding: 12px; margin-bottom: 8px; }
+        .det-person .person-name { font-weight: 800; font-size: 0.88rem; color: var(--text); margin-bottom: 6px; }
+        .det-person .person-chips { display: flex; gap: 8px; flex-wrap: wrap; }
+        .person-chip { background: rgba(96,165,250,0.12); border: 1px solid rgba(96,165,250,0.25); border-radius: 20px; padding: 2px 10px; font-size: 0.72rem; color: var(--primary); font-weight: 700; cursor: pointer; }
+        .person-chip:hover { background: rgba(96,165,250,0.25); }
+        .agrav-person { background: rgba(245,158,11,0.07); border-color: rgba(245,158,11,0.2); }
+        .agrav-person .person-name { color: var(--warn); }
+        .agrav-person .person-chip { background: rgba(245,158,11,0.12); border-color: rgba(245,158,11,0.25); color: var(--warn); }
+        .agrav-person .person-chip:hover { background: rgba(245,158,11,0.25); }
+
+        /* Acciones del historial */
+        .hist-card-actions { display: flex; gap: 8px; padding: 12px 18px; border-top: 1px solid var(--border); background: rgba(0,0,0,0.15); justify-content: flex-end; }
+        .btn-hist-action { padding: 7px 14px; border-radius: 8px; border: none; cursor: pointer; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; }
+        .btn-copy-all { background: rgba(96,165,250,0.15); color: var(--primary); border: 1px solid rgba(96,165,250,0.3); }
+        .btn-copy-all:hover { background: rgba(96,165,250,0.25); }
+        .btn-delete { background: rgba(239,68,68,0.12); color: #fca5a5; border: 1px solid rgba(239,68,68,0.25); }
+        .btn-delete:hover { background: rgba(239,68,68,0.25); }
+
+        /* Toast */
+        #toast { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--success); color: white; padding: 10px 22px; border-radius: 30px; font-weight: 800; font-size: 0.8rem; z-index: 99999; opacity: 0; transition: all 0.3s; pointer-events: none; }
+        #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+        /* Toolbar historial */
+        .hist-toolbar { display: flex; gap: 10px; padding: 12px 28px; border-bottom: 1px solid var(--border); background: rgba(0,0,0,0.1); flex-shrink: 0; align-items: center; flex-wrap: wrap; }
+        .hist-search { flex: 1; min-width: 160px; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border); background: #0f172a; color: white; font-size: 0.85rem; }
+        .hist-count { font-size: 0.75rem; color: var(--label); font-weight: 700; white-space: nowrap; }
+        .btn-clear-all { padding: 8px 14px; border-radius: 8px; background: rgba(239,68,68,0.1); color: #fca5a5; border: 1px solid rgba(239,68,68,0.25); cursor: pointer; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; }
+        .btn-clear-all:hover { background: rgba(239,68,68,0.2); }
     </style>
 </head>
 <body>
 
+<!-- LOADER -->
 <div id="loader-overlay">
     <div class="loader-box">
         <div class="loader-text" id="loader-status">INICIANDO...</div>
@@ -109,12 +210,21 @@
     </div>
 </div>
 
+<!-- TOAST -->
+<div id="toast">✅ Copiado al portapapeles</div>
+
+<!-- BOTÓN FLOTANTE HISTORIAL -->
+<button id="btn-historial-flotante" onclick="abrirHistorial()">
+    📋 Historial <span class="hist-badge" id="hist-badge-count">0</span>
+</button>
+
+<!-- FORMULARIO PRINCIPAL -->
 <div class="app-container">
     <div class="header">
-        <h1>⚖️ Acta de recepción telefónica - V1.1.4 Angel Oliden</h1>
+        <h1>⚖️ Acta de recepción telefónica - V1.2.0 Angel Oliden</h1>
         <div class="subtitle">USO INTERNO - PROHIBIDA SU DIFUSIÓN</div>
     </div>
-    
+
     <form id="docForm">
         <div class="section-title">🏛️ 1. Datos del Acta y Fiscalía</div>
         <div class="grid-3">
@@ -130,27 +240,27 @@
             </div>
         </div>
 
-       <div class="field-group">
-    <label>Fiscal Responsable</label>
-    <select id="fiscal_responsable" onchange="verificarFiscal()">
-        <option value="DRA. MARÍA ANGÉLICA LAZO ALBURQUEQUE" style="font-weight: bold;">DRA. MARÍA ANGÉLICA LAZO ALBURQUEQUE</option>
-        <option value="DRA. SARA RUTH YARLEQUÉ ADRIANZÉN" style="font-weight: bold;" selected>DRA. SARA RUTH YARLEQUÉ ADRIANZÉN</option>
-        <option value="DRA. MARISOL RODRÍGUEZ CHERO" style="font-weight: bold;">DRA. MARISOL RODRÍGUEZ CHERO</option>
-        <option value="DRA. KAREN YESSENIA GUERRERO PEÑA">DRA. KAREN YESSENIA GUERRERO PEÑA</option>
-        <option value="DRA. MARIANELLA WONG CARDOZA">DRA. MARIANELLA WONG CARDOZA</option>
-        <option value="DRA. YERALDINE PRISCILA POZO CORDOVA">DRA. YERALDINE PRISCILA POZO CORDOVA</option>
-        <option value="DRA. EVELYN YASMY RODRIGUEZ SEMINARIO">DRA. EVELYN YASMY RODRIGUEZ SEMINARIO</option>
-        <option value="DRA. MARYURI VALERY PEREZ YAMUCA">DRA. MARYURI VALERY PEREZ YAMUCA</option>
-        <option value="DRA. LEIDY MARIA AQUINO PACHERREZ">DRA. LEIDY MARIA AQUINO PACHERREZ</option>
-        <option value="DRA. CLAUDIA VIVIANA JARAMILLO RAMOS">DRA. CLAUDIA VIVIANA JARAMILLO RAMOS</option>
-        <option value="DR. CARLOS ALONSO OLIVA SALAZAR">DR. CARLOS ALONSO OLIVA SALAZAR</option>
-        <option value="DR. EDMUND ANTENOR ALIAGA RIVERA">DR. EDMUND ANTENOR ALIAGA RIVERA</option>
-        <option value="DRA. CARMEN GUILIANA MURGUIA SUAREZ">DRA. CARMEN GUILIANA MURGUIA SUAREZ</option>
-        <option value="DR. JAIR ALEJANDRO CASTILLO GUERRERO">DR. JAIR ALEJANDRO CASTILLO GUERRERO</option>
-        <option value="OTROS">➕ OTRO FISCAL (ESPECIFICAR)...</option>
-    </select>
-    <input type="text" id="fiscal_otros" style="display:none; margin-top:10px;" placeholder="Escriba el nombre del Fiscal...">
-</div>
+        <div class="field-group">
+            <label>Fiscal Responsable</label>
+            <select id="fiscal_responsable" onchange="verificarFiscal()">
+                <option value="DRA. MARÍA ANGÉLICA LAZO ALBURQUEQUE">DRA. MARÍA ANGÉLICA LAZO ALBURQUEQUE</option>
+                <option value="DRA. SARA RUTH YARLEQUÉ ADRIANZÉN" selected>DRA. SARA RUTH YARLEQUÉ ADRIANZÉN</option>
+                <option value="DRA. MARISOL RODRÍGUEZ CHERO">DRA. MARISOL RODRÍGUEZ CHERO</option>
+                <option value="DRA. KAREN YESSENIA GUERRERO PEÑA">DRA. KAREN YESSENIA GUERRERO PEÑA</option>
+                <option value="DRA. MARIANELLA WONG CARDOZA">DRA. MARIANELLA WONG CARDOZA</option>
+                <option value="DRA. YERALDINE PRISCILA POZO CORDOVA">DRA. YERALDINE PRISCILA POZO CORDOVA</option>
+                <option value="DRA. EVELYN YASMY RODRIGUEZ SEMINARIO">DRA. EVELYN YASMY RODRIGUEZ SEMINARIO</option>
+                <option value="DRA. MARYURI VALERY PEREZ YAMUCA">DRA. MARYURI VALERY PEREZ YAMUCA</option>
+                <option value="DRA. LEIDY MARIA AQUINO PACHERREZ">DRA. LEIDY MARIA AQUINO PACHERREZ</option>
+                <option value="DRA. CLAUDIA VIVIANA JARAMILLO RAMOS">DRA. CLAUDIA VIVIANA JARAMILLO RAMOS</option>
+                <option value="DR. CARLOS ALONSO OLIVA SALAZAR">DR. CARLOS ALONSO OLIVA SALAZAR</option>
+                <option value="DR. EDMUND ANTENOR ALIAGA RIVERA">DR. EDMUND ANTENOR ALIAGA RIVERA</option>
+                <option value="DRA. CARMEN GUILIANA MURGUIA SUAREZ">DRA. CARMEN GUILIANA MURGUIA SUAREZ</option>
+                <option value="DR. JAIR ALEJANDRO CASTILLO GUERRERO">DR. JAIR ALEJANDRO CASTILLO GUERRERO</option>
+                <option value="OTROS">➕ OTRO FISCAL (ESPECIFICAR)...</option>
+            </select>
+            <input type="text" id="fiscal_otros" style="display:none; margin-top:10px;" placeholder="Escriba el nombre del Fiscal...">
+        </div>
 
         <div class="section-title">👮 2. Datos de la Comunicación Policial</div>
         <div class="grid-3">
@@ -230,7 +340,6 @@
 
         <div class="section-title">🚨 5. Detalles de la Intervención</div>
         <div class="grid-3">
-            <!-- DELITO CON AUTOCOMPLETADO -->
             <div class="field-group">
                 <label>Delito</label>
                 <div class="autocomplete-wrapper">
@@ -247,7 +356,6 @@
             <div><span style="font-weight:800; display:block">🤝 ¿Arresto Ciudadano?</span><small style="color:var(--label)">Marcar si inicialmente intervino un civil</small></div>
             <div style="width:20px; height:20px; border:2px solid var(--border); border-radius:4px" id="check_box_visual"></div>
         </label>
-
         <div id="campos_arresto" style="display:none; background:rgba(0,0,0,0.2); padding:20px; border-radius:15px; border:1px solid var(--border); margin-bottom:20px;">
             <div class="grid-3">
                 <div class="field-group"><label>Nombre Ciudadano</label><input type="text" id="nombre_ciudadano"></div>
@@ -265,7 +373,6 @@
         <div class="section-title">🏁 6. Cierre</div>
         <div class="field-group"><label>Hora de Cierre del Acta</label><input type="time" id="hora_cierre"></div>
 
-        <!-- ── BOTONES ── -->
         <div class="download-grid">
             <button type="button" class="btn-dl btn-acta"    onclick="abrirResumen('acta')">📄 DESCARGAR ACTA WORD</button>
             <button type="button" class="btn-dl btn-tabla"   onclick="abrirResumen('tabla')">📋 DESCARGAR TABLA RESUMEN</button>
@@ -274,7 +381,7 @@
     </form>
 </div>
 
-<!-- Modal edición antes de descargar Word/Excel -->
+<!-- MODAL EDICIÓN WORD -->
 <div id="modalResumen" class="modal">
     <div class="modal-content">
         <h2 style="color:var(--primary); margin-top:0; font-weight:800">EDITAR ANTES DE GENERAR</h2>
@@ -286,16 +393,12 @@
     </div>
 </div>
 
-<!-- ── NUEVO MODAL CONFIRMACIÓN SHEETS ── -->
+<!-- MODAL CONFIRMACIÓN SHEETS -->
 <div id="modalConfirmarSheets" class="modal">
     <div class="modal-content">
         <h2 style="color:var(--primary); margin-top:0; font-weight:800; font-size:1.1rem;">☁️ CONFIRMAR ENVÍO AL SERVIDOR</h2>
-        <p style="color:var(--label); font-size:0.82rem; margin:0 0 5px;">Revisa el resumen antes de subir. Una vez enviado, los datos quedarán registrados en el sistema.</p>
-
-        <div class="resumen-sheet" id="resumen-sheets-body">
-            <!-- generado por JS -->
-        </div>
-
+        <p style="color:var(--label); font-size:0.82rem; margin:0 0 5px;">Revisa el resumen. Una vez enviado, los datos quedarán registrados.</p>
+        <div class="resumen-sheet" id="resumen-sheets-body"></div>
         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; margin-top:20px;">
             <button class="btn-add" style="border-style:solid; border-color:var(--border); color:var(--text)" onclick="cerrarModalSheets()">✕ CANCELAR</button>
             <button class="btn-dl btn-gsheets" onclick="confirmarEnvioSheets()">✅ SÍ, SUBIR AHORA</button>
@@ -303,430 +406,578 @@
     </div>
 </div>
 
-<script>
-    let currentTarget = '';
+<!-- MODAL HISTORIAL -->
+<div id="modalHistorial" class="modal">
+    <div class="modal-content">
+        <div class="hist-header">
+            <h2>📋 Historial de Envíos</h2>
+            <button onclick="cerrarHistorial()" style="background:transparent; border:none; color:var(--label); font-size:1.4rem; cursor:pointer; line-height:1;">✕</button>
+        </div>
+        <div class="hist-toolbar">
+            <input class="hist-search" id="hist-search-input" placeholder="🔍 Buscar por nombre, delito, PNP..." oninput="renderHistorial()">
+            <span class="hist-count" id="hist-count-label"></span>
+            <button class="btn-clear-all" onclick="limpiarTodoHistorial()">🗑 LIMPIAR TODO</button>
+        </div>
+        <div class="hist-body" id="hist-body-container">
+            <div class="hist-empty"><span>📂</span>No hay registros aún.<br>Los datos enviados al servidor aparecerán aquí.</div>
+        </div>
+    </div>
+</div>
 
-    /* ──────────────────────────────
-       LISTA COMPLETA DE DELITOS
-    ────────────────────────────── */
-    const DELITOS = [
-        "ROBO SIMPLE","ROBO AGRAVADO","HURTO SIMPLE","HURTO AGRAVADO","RECEPTACIÓN",
-        "EXTORSIÓN","SECUESTRO","LESIONES LEVES","LESIONES GRAVES","LESIONES GRAVÍSIMAS",
-        "HOMICIDIO SIMPLE","HOMICIDIO CALIFICADO","PARRICIDIO","FEMINICIDIO","HOMICIDIO CULPOSO",
-        "ABANDONO DE PERSONA EN PELIGRO","VIOLENCIA FÍSICA","VIOLENCIA PSICOLÓGICA","VIOLENCIA FAMILIAR",
-        "VIOLACIÓN SEXUAL DE MENOR","VIOLACIÓN SEXUAL","ACTOS CONTRA EL PUDOR","TOCAMIENTOS INDEBIDOS",
-        "EXPLOTACIÓN SEXUAL","PORNOGRAFÍA INFANTIL","PROXENETISMO","CLIENTE DE PROSTITUCIÓN INFANTIL",
-        "TRATA DE PERSONAS","ACOSO SEXUAL","CHANTAJE SEXUAL","ABUSO DE AUTORIDAD",
-        "OMISIÓN DE ACTOS FUNCIONALES","COHECHO PASIVO PROPIO","COHECHO PASIVO IMPROPIO","COHECHO ACTIVO",
-        "COLUSIÓN SIMPLE","COLUSIÓN AGRAVADA","PECULADO","PECULADO DOLOSO","PECULADO CULPOSO",
-        "MALVERSACIÓN","CONCUSIÓN","NEGOCIACIÓN INCOMPATIBLE",
-        "FRAUDE EN LA ADMINISTRACIÓN DE PERSONAS JURÍDICAS","TRÁFICO DE INFLUENCIAS",
-        "ENRIQUECIMIENTO ILÍCITO","FALSIFICACIÓN DE DOCUMENTOS","FALSIFICACIÓN DE DOCUMENTOS PRIVADOS",
-        "FALSA DECLARACIÓN EN PROCEDIMIENTO ADMINISTRATIVO","FALSIFICACIÓN DE SELLOS Y TIMBRES",
-        "FALSIFICACIÓN DE MONEDA","FALSIFICACIÓN DE BILLETES","FALSIFICACIÓN DE TARJETAS DE CRÉDITO",
-        "FALSIFICACIÓN DE NUMERARIO","USO DE DOCUMENTO FALSO","FALSEDAD IDEOLÓGICA","FALSEDAD MATERIAL",
-        "FALSEDAD GENÉRICA","FRAUDE PROCESAL","ESTELIONATO","LAVADO DE ACTIVOS",
-        "FINANCIAMIENTO DEL TERRORISMO","ASOCIACIÓN ILÍCITA","ORGANIZACIÓN CRIMINAL","USURPACIÓN",
-        "USURPACIÓN AGRAVADA","ESTAFA","ESTAFA AGRAVADA","APROPIACIÓN ILÍCITA","DEFRAUDACIÓN TRIBUTARIA",
-        "CONTRABANDO","TRÁFICO ILÍCITO DE DROGAS","MICROCOMERCIALIZACIÓN DE DROGAS",
-        "POSESIÓN DE DROGAS CON FINES DE TRÁFICO","PROMOCIÓN AL CONSUMO DE DROGAS",
-        "TENENCIA ILEGAL DE ARMAS","PORTACIÓN ILEGAL DE ARMAS","FABRICACIÓN ILEGAL DE ARMAS",
-        "TRÁFICO ILÍCITO DE ARMAS","CONDUCCIÓN EN ESTADO DE EBRIEDAD",
-        "CONDUCCIÓN EN ESTADO DE DROGADICCIÓN","OMISIÓN A LA ASISTENCIA FAMILIAR","ABANDONO DE NIÑO",
-        "EXPOSICIÓN A PELIGRO","RESISTENCIA A LA AUTORIDAD","VIOLENCIA CONTRA LA AUTORIDAD",
-        "DESOBEDIENCIA A LA AUTORIDAD","ATENTADO CONTRA LA AUTORIDAD","ENCUBRIMIENTO PERSONAL",
-        "ENCUBRIMIENTO REAL","DENUNCIA CALUMNIOSA","AUTOENCUBRIMIENTO","MOTÍN","DISTURBIOS",
-        "ATENTADO CONTRA LA SEGURIDAD PÚBLICA","PELIGRO COMÚN","INCENDIO","EXPLOSIONES","ESTRAGOS",
-        "CONTAMINACIÓN AMBIENTAL","TRÁFICO ILÍCITO DE RESIDUOS PELIGROSOS","MINERÍA ILEGAL",
-        "TALA ILEGAL","DEPREDACIÓN DE FAUNA SILVESTRE","DEPREDACIÓN DE FLORA","DELITOS CONTRA BOSQUES",
-        "DELITOS CONTRA LOS RECURSOS NATURALES","PESCA ILEGAL","DELITOS INFORMÁTICOS",
-        "FRAUDE INFORMÁTICO","ACCESO ILÍCITO A SISTEMAS INFORMÁTICOS","INTERCEPTACIÓN DE DATOS",
-        "INTERCEPTACIÓN DE COMUNICACIONES","VIOLACIÓN DE CORRESPONDENCIA",
-        "VIOLACIÓN DE SECRETO PROFESIONAL","VIOLACIÓN DE DATOS PERSONALES","OBSTRUCCIÓN A LA JUSTICIA",
-        "OMISIÓN DE DENUNCIA","PATROCINIO ILEGAL","LITIGACIÓN MALICIOSA","ABANDONO DE FUNCIONES",
-        "SUPLANTACIÓN DE IDENTIDAD","ABUSO DE DOCUMENTOS DE IDENTIDAD",
-        "FALSEDAD EN INFORMACIÓN DE REGISTROS","BIGAMIA","POLIGAMIA",
-        "OMISIÓN DE PRESTACIÓN DE ALIMENTOS","ALTERACIÓN DE LINDEROS","PERTURBACIÓN DE POSESIÓN",
-        "COACCIÓN","AMENAZAS","CHANTAJE","CALUMNIA","DIFAMACIÓN","INJURIA",
-        "PROPAGACIÓN DE ENFERMEDADES PELIGROSAS","CONTAMINACIÓN DE AGUA","PROPAGACIÓN DE EPIDEMIAS",
-        "COMERCIALIZACIÓN DE PRODUCTOS NOCIVOS","ADULTERACIÓN DE ALIMENTOS",
-        "TRÁFICO ILÍCITO DE BIENES CULTURALES","DAÑOS SIMPLES","DAÑOS AGRAVADOS",
-        "VIOLACIÓN DE MEDIDAS SANITARIAS","ALTERACIÓN DE EVIDENCIAS","SUSTRACCIÓN DE MENORES",
-        "VIOLACIÓN A LA INTIMIDAD","OMISIÓN DE SOCORRO",
-        "ATENTADO CONTRA LA INTEGRIDAD DE INFRAESTRUCTURA","ACTOS TERRORISTAS",
-        "COLABORACIÓN CON EL TERRORISMO","APOLOGÍA DEL TERRORISMO","PELIGRO POR MEDIOS DE TRANSPORTE",
-        "SABOTAJE","OBSTACULIZACIÓN DE SERVICIOS PÚBLICOS","ALTERACIÓN DEL ORDEN PÚBLICO",
-        "PERTURBACIÓN DE SERVICIOS ESENCIALES","DESACATO","QUEBRANTAMIENTO DE CONDENA",
-        "QUEBRANTAMIENTO DE MEDIDAS DE PROTECCIÓN","QUEBRANTAMIENTO DE RÉGIMEN DE VISITAS",
-        "INCUMPLIMIENTO DE MANDATO JUDICIAL","INCUMPLIMIENTO DE MEDIDAS DE SEGURIDAD",
-        "OMISIÓN DE ACATAR DISPOSICIÓN LEGAL"
+<script>
+/* ══════════════════════════════════════════
+   LISTA DE DELITOS
+══════════════════════════════════════════ */
+const DELITOS = [
+    "ROBO SIMPLE","ROBO AGRAVADO","HURTO SIMPLE","HURTO AGRAVADO","RECEPTACIÓN",
+    "EXTORSIÓN","SECUESTRO","LESIONES LEVES","LESIONES GRAVES","LESIONES GRAVÍSIMAS",
+    "HOMICIDIO SIMPLE","HOMICIDIO CALIFICADO","PARRICIDIO","FEMINICIDIO","HOMICIDIO CULPOSO",
+    "ABANDONO DE PERSONA EN PELIGRO","VIOLENCIA FÍSICA","VIOLENCIA PSICOLÓGICA","VIOLENCIA FAMILIAR",
+    "VIOLACIÓN SEXUAL DE MENOR","VIOLACIÓN SEXUAL","ACTOS CONTRA EL PUDOR","TOCAMIENTOS INDEBIDOS",
+    "EXPLOTACIÓN SEXUAL","PORNOGRAFÍA INFANTIL","PROXENETISMO","CLIENTE DE PROSTITUCIÓN INFANTIL",
+    "TRATA DE PERSONAS","ACOSO SEXUAL","CHANTAJE SEXUAL","ABUSO DE AUTORIDAD",
+    "OMISIÓN DE ACTOS FUNCIONALES","COHECHO PASIVO PROPIO","COHECHO PASIVO IMPROPIO","COHECHO ACTIVO",
+    "COLUSIÓN SIMPLE","COLUSIÓN AGRAVADA","PECULADO","PECULADO DOLOSO","PECULADO CULPOSO",
+    "MALVERSACIÓN","CONCUSIÓN","NEGOCIACIÓN INCOMPATIBLE",
+    "FRAUDE EN LA ADMINISTRACIÓN DE PERSONAS JURÍDICAS","TRÁFICO DE INFLUENCIAS",
+    "ENRIQUECIMIENTO ILÍCITO","FALSIFICACIÓN DE DOCUMENTOS","FALSIFICACIÓN DE DOCUMENTOS PRIVADOS",
+    "FALSA DECLARACIÓN EN PROCEDIMIENTO ADMINISTRATIVO","FALSIFICACIÓN DE SELLOS Y TIMBRES",
+    "FALSIFICACIÓN DE MONEDA","FALSIFICACIÓN DE BILLETES","FALSIFICACIÓN DE TARJETAS DE CRÉDITO",
+    "FALSIFICACIÓN DE NUMERARIO","USO DE DOCUMENTO FALSO","FALSEDAD IDEOLÓGICA","FALSEDAD MATERIAL",
+    "FALSEDAD GENÉRICA","FRAUDE PROCESAL","ESTELIONATO","LAVADO DE ACTIVOS",
+    "FINANCIAMIENTO DEL TERRORISMO","ASOCIACIÓN ILÍCITA","ORGANIZACIÓN CRIMINAL","USURPACIÓN",
+    "USURPACIÓN AGRAVADA","ESTAFA","ESTAFA AGRAVADA","APROPIACIÓN ILÍCITA","DEFRAUDACIÓN TRIBUTARIA",
+    "CONTRABANDO","TRÁFICO ILÍCITO DE DROGAS","MICROCOMERCIALIZACIÓN DE DROGAS",
+    "POSESIÓN DE DROGAS CON FINES DE TRÁFICO","PROMOCIÓN AL CONSUMO DE DROGAS",
+    "TENENCIA ILEGAL DE ARMAS","PORTACIÓN ILEGAL DE ARMAS","FABRICACIÓN ILEGAL DE ARMAS",
+    "TRÁFICO ILÍCITO DE ARMAS","CONDUCCIÓN EN ESTADO DE EBRIEDAD",
+    "CONDUCCIÓN EN ESTADO DE DROGADICCIÓN","OMISIÓN A LA ASISTENCIA FAMILIAR","ABANDONO DE NIÑO",
+    "EXPOSICIÓN A PELIGRO","RESISTENCIA A LA AUTORIDAD","VIOLENCIA CONTRA LA AUTORIDAD",
+    "DESOBEDIENCIA A LA AUTORIDAD","ATENTADO CONTRA LA AUTORIDAD","ENCUBRIMIENTO PERSONAL",
+    "ENCUBRIMIENTO REAL","DENUNCIA CALUMNIOSA","AUTOENCUBRIMIENTO","MOTÍN","DISTURBIOS",
+    "ATENTADO CONTRA LA SEGURIDAD PÚBLICA","PELIGRO COMÚN","INCENDIO","EXPLOSIONES","ESTRAGOS",
+    "CONTAMINACIÓN AMBIENTAL","TRÁFICO ILÍCITO DE RESIDUOS PELIGROSOS","MINERÍA ILEGAL",
+    "TALA ILEGAL","DEPREDACIÓN DE FAUNA SILVESTRE","DEPREDACIÓN DE FLORA","DELITOS CONTRA BOSQUES",
+    "DELITOS CONTRA LOS RECURSOS NATURALES","PESCA ILEGAL","DELITOS INFORMÁTICOS",
+    "FRAUDE INFORMÁTICO","ACCESO ILÍCITO A SISTEMAS INFORMÁTICOS","INTERCEPTACIÓN DE DATOS",
+    "INTERCEPTACIÓN DE COMUNICACIONES","VIOLACIÓN DE CORRESPONDENCIA",
+    "VIOLACIÓN DE SECRETO PROFESIONAL","VIOLACIÓN DE DATOS PERSONALES","OBSTRUCCIÓN A LA JUSTICIA",
+    "OMISIÓN DE DENUNCIA","PATROCINIO ILEGAL","LITIGACIÓN MALICIOSA","ABANDONO DE FUNCIONES",
+    "SUPLANTACIÓN DE IDENTIDAD","ABUSO DE DOCUMENTOS DE IDENTIDAD",
+    "FALSEDAD EN INFORMACIÓN DE REGISTROS","BIGAMIA","POLIGAMIA",
+    "OMISIÓN DE PRESTACIÓN DE ALIMENTOS","ALTERACIÓN DE LINDEROS","PERTURBACIÓN DE POSESIÓN",
+    "COACCIÓN","AMENAZAS","CHANTAJE","CALUMNIA","DIFAMACIÓN","INJURIA",
+    "PROPAGACIÓN DE ENFERMEDADES PELIGROSAS","CONTAMINACIÓN DE AGUA","PROPAGACIÓN DE EPIDEMIAS",
+    "COMERCIALIZACIÓN DE PRODUCTOS NOCIVOS","ADULTERACIÓN DE ALIMENTOS",
+    "TRÁFICO ILÍCITO DE BIENES CULTURALES","DAÑOS SIMPLES","DAÑOS AGRAVADOS",
+    "VIOLACIÓN DE MEDIDAS SANITARIAS","ALTERACIÓN DE EVIDENCIAS","SUSTRACCIÓN DE MENORES",
+    "VIOLACIÓN A LA INTIMIDAD","OMISIÓN DE SOCORRO",
+    "ATENTADO CONTRA LA INTEGRIDAD DE INFRAESTRUCTURA","ACTOS TERRORISTAS",
+    "COLABORACIÓN CON EL TERRORISMO","APOLOGÍA DEL TERRORISMO","PELIGRO POR MEDIOS DE TRANSPORTE",
+    "SABOTAJE","OBSTACULIZACIÓN DE SERVICIOS PÚBLICOS","ALTERACIÓN DEL ORDEN PÚBLICO",
+    "PERTURBACIÓN DE SERVICIOS ESENCIALES","DESACATO","QUEBRANTAMIENTO DE CONDENA",
+    "QUEBRANTAMIENTO DE MEDIDAS DE PROTECCIÓN","QUEBRANTAMIENTO DE RÉGIMEN DE VISITAS",
+    "INCUMPLIMIENTO DE MANDATO JUDICIAL","INCUMPLIMIENTO DE MEDIDAS DE SEGURIDAD",
+    "OMISIÓN DE ACATAR DISPOSICIÓN LEGAL"
+];
+
+let activeSugerencia = -1;
+let currentTarget = '';
+const HIST_KEY = 'actas_historial_v1';
+const MAX_HIST  = 50;
+
+/* ── INIT ── */
+window.onload = function() {
+    const meses = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+    const f = new Date();
+    document.getElementById('fecha_acta').value = `${f.getDate()} de ${meses[f.getMonth()]} del ${f.getFullYear()}`;
+    actualizarBadge();
+};
+
+/* ══════════════════════════════════════════
+   AUTOCOMPLETE DELITOS
+══════════════════════════════════════════ */
+function filtrarDelitos() {
+    const input = document.getElementById('delito');
+    const lista = document.getElementById('lista_delitos');
+    const query = input.value.trim().toUpperCase();
+    activeSugerencia = -1;
+    if (!query) { lista.style.display = 'none'; return; }
+    const coincidencias = DELITOS.filter(d => d.includes(query));
+    if (!coincidencias.length) { lista.style.display = 'none'; return; }
+    lista.innerHTML = coincidencias.slice(0, 12).map((d, i) =>
+        `<div onmousedown="seleccionarDelito('${d}')" data-idx="${i}">${d}</div>`
+    ).join('');
+    lista.style.display = 'block';
+}
+function seleccionarDelito(valor) {
+    document.getElementById('delito').value = valor;
+    document.getElementById('lista_delitos').style.display = 'none';
+}
+function ocultarSugerencias() {
+    setTimeout(() => { document.getElementById('lista_delitos').style.display = 'none'; }, 150);
+}
+function navSugerencias(e) {
+    const lista = document.getElementById('lista_delitos');
+    const items = lista.querySelectorAll('div');
+    if (!items.length) return;
+    if (e.key === 'ArrowDown') { e.preventDefault(); activeSugerencia = Math.min(activeSugerencia+1, items.length-1); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); activeSugerencia = Math.max(activeSugerencia-1, 0); }
+    else if (e.key === 'Enter' && activeSugerencia >= 0) { e.preventDefault(); seleccionarDelito(items[activeSugerencia].textContent); return; }
+    else if (e.key === 'Escape') { lista.style.display = 'none'; return; }
+    items.forEach((it, i) => it.classList.toggle('active-item', i === activeSugerencia));
+    if (activeSugerencia >= 0) items[activeSugerencia].scrollIntoView({ block: 'nearest' });
+}
+
+/* ══════════════════════════════════════════
+   FORMULARIO
+══════════════════════════════════════════ */
+function verificarUnidad() {
+    document.getElementById('unidad_pnp_otros').style.display =
+        document.getElementById('unidad_pnp').value === "OTROS" ? "block" : "none";
+}
+function verificarFiscal() {
+    document.getElementById('fiscal_otros').style.display =
+        document.getElementById('fiscal_responsable').value === "OTROS" ? "block" : "none";
+}
+function agregarDetenido() {
+    const id = Date.now();
+    const div = document.createElement('div');
+    div.className = 'detenido-card'; div.id = `bloque_${id}`;
+    div.innerHTML = `<button type="button" class="btn-remove" onclick="document.getElementById('bloque_${id}').remove()">✕</button><div class="grid-3"><div class="field-group"><label>Nombre Completo</label><input type="text" class="detenido_nombre"></div><div class="field-group"><label>DNI / DOC</label><input type="text" class="detenido_dni"></div><div class="field-group"><label>Edad</label><input type="number" class="detenido_edad"></div></div>`;
+    document.getElementById('contenedor_detenidos').appendChild(div);
+}
+function agregarAgraviado() {
+    const id = Date.now();
+    const div = document.createElement('div');
+    div.className = 'detenido-card'; div.id = `agrav_${id}`;
+    div.innerHTML = `<button type="button" class="btn-remove" onclick="document.getElementById('agrav_${id}').remove()">✕</button><div class="grid-3"><div class="field-group"><label>Nombre Agraviado</label><input type="text" class="agraviado_nombre"></div><div class="field-group"><label>DNI / DOC</label><input type="text" class="agraviado_dni"></div><div class="field-group"><label>Edad</label><input type="number" class="agraviado_edad"></div></div>`;
+    document.getElementById('contenedor_agraviados').appendChild(div);
+}
+function toggleArrestoVisual() {
+    const check = document.getElementById('check_arresto').checked;
+    document.getElementById('arresto_card').classList.toggle('active', check);
+    document.getElementById('check_box_visual').style.background = check ? 'var(--success)' : 'transparent';
+    document.getElementById('campos_arresto').style.display = check ? 'block' : 'none';
+}
+
+/* ══════════════════════════════════════════
+   OBTENER DATA
+══════════════════════════════════════════ */
+function obtenerDataFinal() {
+    const n = document.querySelectorAll('.detenido_nombre');
+    const d = document.querySelectorAll('.detenido_dni');
+    const e = document.querySelectorAll('.detenido_edad');
+    let lista = [];
+    n.forEach((input, i) => {
+        if (input.value.trim())
+            lista.push({ num: i+1, nombre: input.value.toUpperCase(), dni: d[i].value||"---", edad: e[i].value||"---" });
+    });
+    const an = document.querySelectorAll('.agraviado_nombre');
+    const ad = document.querySelectorAll('.agraviado_dni');
+    const ae = document.querySelectorAll('.agraviado_edad');
+    let lista_agraviados = [];
+    an.forEach((input, i) => {
+        if (input.value.trim())
+            lista_agraviados.push({ num: i+1, nombre_agraviado: input.value.toUpperCase(), dni_agraviado: ad[i].value||"---", edad_agraviado: ae[i].value||"---" });
+    });
+    const fiscalFinal = document.getElementById('fiscal_responsable').value === "OTROS"
+        ? document.getElementById('fiscal_otros').value
+        : document.getElementById('fiscal_responsable').value;
+    return {
+        HORA: document.getElementById('hora_acta').value,
+        FECHA: document.getElementById('fecha_acta').value,
+        NUMERO_FISCALIA: document.getElementById('num_fiscalia').value,
+        FISCAL_RESPONSABLE: fiscalFinal.toUpperCase(),
+        NOMBRE_PNP: document.getElementById('nombre_pnp').value.toUpperCase(),
+        DNI_PNP: document.getElementById('dni_pnp').value,
+        CELULAR_PNP: document.getElementById('celular_pnp').value,
+        UNIDAD_PNP: document.getElementById('unidad_pnp').value === "OTROS"
+            ? document.getElementById('unidad_pnp_otros').value.toUpperCase()
+            : document.getElementById('unidad_pnp').value,
+        DELITO: document.getElementById('delito').value.toUpperCase(),
+        LUGAR_INTERVENCION: document.getElementById('lugar_intervencion').value.toUpperCase(),
+        lista_detenidos: lista,
+        lista_agraviados: lista_agraviados,
+        NOMBRE_AGRAVIADO: lista_agraviados.length > 0 ? lista_agraviados[0].nombre_agraviado : "---",
+        HORA_INTERVENCION: document.getElementById('hora_intervencion').value,
+        es_arresto_ciudadano: document.getElementById('check_arresto').checked,
+        NOMBRE_CIUDADANO: document.getElementById('nombre_ciudadano').value.toUpperCase(),
+        DNI_CIUDADANO: document.getElementById('dni_ciudadano').value,
+        TIPO_FLAGRANCIA: document.getElementById('tipo_flagrancia').value,
+        HORA_CIERRE: document.getElementById('hora_cierre').value
+    };
+}
+
+/* ══════════════════════════════════════════
+   MODAL DESCARGA WORD
+══════════════════════════════════════════ */
+function abrirResumen(tipo) {
+    currentTarget = tipo;
+    const container = document.getElementById('edit-fields-container');
+    const fiscalVal = document.getElementById('fiscal_responsable').value === "OTROS"
+        ? document.getElementById('fiscal_otros').value
+        : document.getElementById('fiscal_responsable').value;
+    container.innerHTML = `
+        <div class="field-group"><label>Fiscalía</label><input type="text" id="edit_num_fiscalia" value="${document.getElementById('num_fiscalia').value}"></div>
+        <div class="field-group"><label>Fiscal Resp.</label><input type="text" id="edit_fiscal_responsable" value="${fiscalVal.toUpperCase()}"></div>
+        <div class="field-group"><label>Delito</label><input type="text" id="edit_delito" value="${document.getElementById('delito').value.toUpperCase()}"></div>
+        <div class="field-group"><label>Lugar</label><input type="text" id="edit_lugar_intervencion" value="${document.getElementById('lugar_intervencion').value.toUpperCase()}"></div>
+    `;
+    document.getElementById('modalResumen').style.display = 'flex';
+    document.getElementById('btnFinalizarDescarga').onclick = ejecutarConAnimacion;
+}
+function cerrarResumen() { document.getElementById('modalResumen').style.display = 'none'; }
+
+async function ejecutarConAnimacion() {
+    cerrarResumen();
+    const overlay = document.getElementById('loader-overlay');
+    const status  = document.getElementById('loader-status');
+    const bar     = document.getElementById('progress-bar');
+    const link    = document.getElementById('link-verificacion');
+    link.style.display = 'none';
+    overlay.style.display = 'flex';
+    const mensajes = [
+        { t: "Iniciando procesador...", p: 20 },
+        { t: "Generando Word...", p: 50 },
+        { t: "Validando plantillas...", p: 80 },
+        { t: "Gracias por usar el generador", p: 100 }
+    ];
+    for (const m of mensajes) {
+        status.innerText = m.t; bar.style.width = m.p + "%";
+        await new Promise(r => setTimeout(r, 600));
+    }
+    if (currentTarget === 'acta')  await descargarWord('MODELO_DOS.docx', 'RECEPCION');
+    if (currentTarget === 'tabla') await descargarWord('MODELO_WORD_TABLA.docx', 'TABLA');
+    setTimeout(() => { overlay.style.display = 'none'; bar.style.width = "0%"; }, 500);
+}
+
+async function descargarWord(plantilla, prefijo) {
+    const data = obtenerDataFinal();
+    try {
+        const resp = await fetch(plantilla);
+        const content = await resp.arrayBuffer();
+        const zip = new PizZip(content);
+        const doc = new window.docxtemplater(zip, { paragraphLoop: true, linebreaks: true });
+        doc.render(data);
+        const blob = doc.getZip().generate({
+            type: "blob",
+            mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        });
+        const nombreBase = (data.lista_detenidos[0]?.nombre || 'DOC')
+            .replace(/[^A-Z0-9 _\-]/gi, '_').substring(0, 40);
+        const nombreArchivo = prefijo + '_' + nombreBase + '.docx';
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = nombreArchivo;
+        document.body.appendChild(a); a.click();
+        setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 3000);
+    } catch (e) { alert("Error con la plantilla Word."); }
+}
+
+/* ══════════════════════════════════════════
+   MODAL CONFIRMACIÓN SHEETS
+══════════════════════════════════════════ */
+function abrirConfirmacionSheets() {
+    const data = obtenerDataFinal();
+    const body = document.getElementById('resumen-sheets-body');
+
+    const filas = [
+        ["Fiscalía N°", data.NUMERO_FISCALIA],
+        ["Fiscal", data.FISCAL_RESPONSABLE],
+        ["Fecha", data.FECHA],
+        ["Hora de llamada", data.HORA],
+        ["Hora intervención", data.HORA_INTERVENCION],
+        ["Delito", data.DELITO],
+        ["Lugar", data.LUGAR_INTERVENCION],
+        ["Unidad PNP", data.UNIDAD_PNP],
+        ["Efectivo PNP", data.NOMBRE_PNP + (data.DNI_PNP ? ` · DNI: ${data.DNI_PNP}` : "")],
+        ["Arresto ciudadano", data.es_arresto_ciudadano ? "SÍ" : "NO"],
+        ["Hora cierre", data.HORA_CIERRE],
     ];
 
-    let activeSugerencia = -1;
+    let html = filas.map(([k, v]) =>
+        `<div class="fila"><span class="clave">${k}</span><span class="valor">${v || '—'}</span></div>`
+    ).join('');
 
-    function filtrarDelitos() {
-        const input = document.getElementById('delito');
-        const lista = document.getElementById('lista_delitos');
-        const query = input.value.trim().toUpperCase();
-        activeSugerencia = -1;
-
-        if (!query) { lista.style.display = 'none'; return; }
-
-        const coincidencias = DELITOS.filter(d => d.includes(query));
-        if (coincidencias.length === 0) { lista.style.display = 'none'; return; }
-
-        lista.innerHTML = coincidencias.slice(0, 12).map((d, i) =>
-            `<div onmousedown="seleccionarDelito('${d}')" data-idx="${i}">${d}</div>`
+    if (data.lista_detenidos.length > 0) {
+        html += `<div class="subtitulo-det">👤 Detenidos (${data.lista_detenidos.length})</div>`;
+        html += data.lista_detenidos.map(d =>
+            `<span class="tag-det">${d.nombre} · ${d.dni} · ${d.edad} años</span>`
         ).join('');
-        lista.style.display = 'block';
     }
-
-    function seleccionarDelito(valor) {
-        document.getElementById('delito').value = valor;
-        document.getElementById('lista_delitos').style.display = 'none';
-    }
-
-    function ocultarSugerencias() {
-        setTimeout(() => { document.getElementById('lista_delitos').style.display = 'none'; }, 150);
-    }
-
-    function navSugerencias(e) {
-        const lista = document.getElementById('lista_delitos');
-        const items = lista.querySelectorAll('div');
-        if (!items.length) return;
-        if (e.key === 'ArrowDown') {
-            e.preventDefault();
-            activeSugerencia = Math.min(activeSugerencia + 1, items.length - 1);
-        } else if (e.key === 'ArrowUp') {
-            e.preventDefault();
-            activeSugerencia = Math.max(activeSugerencia - 1, 0);
-        } else if (e.key === 'Enter' && activeSugerencia >= 0) {
-            e.preventDefault();
-            seleccionarDelito(items[activeSugerencia].textContent);
-            return;
-        } else if (e.key === 'Escape') {
-            lista.style.display = 'none'; return;
-        }
-        items.forEach((it, i) => it.classList.toggle('active-item', i === activeSugerencia));
-        if (activeSugerencia >= 0) items[activeSugerencia].scrollIntoView({ block: 'nearest' });
-    }
-
-    /* ──────────────────────────────
-       MODAL CONFIRMACIÓN SHEETS
-    ────────────────────────────── */
-    function abrirConfirmacionSheets() {
-        const data = obtenerDataFinal();
-        const body = document.getElementById('resumen-sheets-body');
-
-        const filas = [
-            ["Fiscalía", data.NUMERO_FISCALIA],
-            ["Fiscal", data.FISCAL_RESPONSABLE],
-            ["Fecha", data.FECHA],
-            ["Hora intervención", data.HORA_INTERVENCION],
-            ["Delito", data.DELITO],
-            ["Lugar", data.LUGAR_INTERVENCION],
-            ["Unidad PNP", data.UNIDAD_PNP],
-            ["Efectivo PNP", data.NOMBRE_PNP + (data.DNI_PNP ? ` (${data.DNI_PNP})` : "")],
-            ["Arresto ciudadano", data.es_arresto_ciudadano ? "SÍ" : "NO"],
-            ["Hora cierre", data.HORA_CIERRE],
-        ];
-
-        let html = filas.map(([k, v]) =>
-            `<div class="fila"><span class="clave">${k}</span><span class="valor">${v || '—'}</span></div>`
+    if (data.lista_agraviados.length > 0) {
+        html += `<div class="subtitulo-det" style="color:var(--warn); margin-top:10px;">🧑‍⚖️ Agraviados (${data.lista_agraviados.length})</div>`;
+        html += data.lista_agraviados.map(a =>
+            `<span class="tag-det tag-agrav">${a.nombre_agraviado} · ${a.dni_agraviado} · ${a.edad_agraviado} años</span>`
         ).join('');
-
-        // Detenidos
-        if (data.lista_detenidos.length > 0) {
-            html += `<div class="subtitulo-det">👤 Detenidos (${data.lista_detenidos.length})</div>`;
-            html += data.lista_detenidos.map(d =>
-                `<span class="tag-det">${d.nombre} · ${d.dni} · ${d.edad} años</span>`
-            ).join('');
-        }
-
-        // Agraviados
-        if (data.lista_agraviados.length > 0) {
-            html += `<div class="subtitulo-det" style="color:#f59e0b; margin-top:10px;">🧑‍⚖️ Agraviados (${data.lista_agraviados.length})</div>`;
-            html += data.lista_agraviados.map(a =>
-                `<span class="tag-det" style="border-color:#f59e0b; color:#f59e0b; background:rgba(245,158,11,0.1)">${a.nombre_agraviado} · ${a.dni_agraviado} · ${a.edad_agraviado} años</span>`
-            ).join('');
-        }
-
-        body.innerHTML = html;
-        document.getElementById('modalConfirmarSheets').style.display = 'flex';
     }
 
-    function cerrarModalSheets() {
-        document.getElementById('modalConfirmarSheets').style.display = 'none';
-    }
+    body.innerHTML = html;
+    document.getElementById('modalConfirmarSheets').style.display = 'flex';
+}
+function cerrarModalSheets() { document.getElementById('modalConfirmarSheets').style.display = 'none'; }
+async function confirmarEnvioSheets() {
+    cerrarModalSheets();
+    await enviarAGoogleSheets();
+}
 
-    async function confirmarEnvioSheets() {
-        cerrarModalSheets();
-        await enviarAGoogleSheets();
-    }
+/* ══════════════════════════════════════════
+   ENVÍO A GOOGLE SHEETS + GUARDAR HISTORIAL
+══════════════════════════════════════════ */
+async function enviarAGoogleSheets() {
+    const data = obtenerDataFinal();
+    const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbzOzTUSOfafoweMEff_aisETfBA4so51SbmtQpZfPsYo2HJn09vkt02Uo2VHpPOO4VM/exec";
 
-    /* ──────────────────────────────
-       RESTO DE FUNCIONES (sin cambios)
-    ────────────────────────────── */
-    window.onload = function() {
-        const meses = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
-        const f = new Date();
-        document.getElementById('fecha_acta').value = `${f.getDate()} de ${meses[f.getMonth()]} del ${f.getFullYear()}`;
-    };
+    if (data.lista_detenidos.length === 0) { alert("⚠️ No hay detenidos para registrar."); return; }
 
-    function verificarUnidad() {
-        const sel = document.getElementById('unidad_pnp').value;
-        document.getElementById('unidad_pnp_otros').style.display = (sel === "OTROS") ? "block" : "none";
-    }
+    const overlay = document.getElementById('loader-overlay');
+    const status  = document.getElementById('loader-status');
+    const bar     = document.getElementById('progress-bar');
+    const link    = document.getElementById('link-verificacion');
 
-    function verificarFiscal() {
-        const sel = document.getElementById('fiscal_responsable').value;
-        document.getElementById('fiscal_otros').style.display = (sel === "OTROS") ? "block" : "none";
-    }
+    link.style.display = 'none';
+    overlay.style.display = 'flex';
+    status.innerText = "CONECTANDO CON LA NUBE...";
+    bar.style.width = "30%";
 
-    function agregarDetenido() {
-        const id = Date.now();
-        const div = document.createElement('div');
-        div.className = 'detenido-card';
-        div.id = `bloque_${id}`;
-        div.innerHTML = `<button type="button" class="btn-remove" onclick="document.getElementById('bloque_${id}').remove()">✕</button><div class="grid-3"><div class="field-group"><label>Nombre Completo</label><input type="text" class="detenido_nombre"></div><div class="field-group"><label>DNI / DOC</label><input type="text" class="detenido_dni"></div><div class="field-group"><label>Edad</label><input type="number" class="detenido_edad"></div></div>`;
-        document.getElementById('contenedor_detenidos').appendChild(div);
-    }
-
-    function agregarAgraviado() {
-        const id = Date.now();
-        const div = document.createElement('div');
-        div.className = 'detenido-card';
-        div.id = `agrav_${id}`;
-        div.innerHTML = `<button type="button" class="btn-remove" onclick="document.getElementById('agrav_${id}').remove()">✕</button><div class="grid-3"><div class="field-group"><label>Nombre Agraviado</label><input type="text" class="agraviado_nombre"></div><div class="field-group"><label>DNI / DOC</label><input type="text" class="agraviado_dni"></div><div class="field-group"><label>Edad</label><input type="number" class="agraviado_edad"></div></div>`;
-        document.getElementById('contenedor_agraviados').appendChild(div);
-    }
-
-    function toggleArrestoVisual() {
-        const check = document.getElementById('check_arresto').checked;
-        document.getElementById('arresto_card').classList.toggle('active', check);
-        document.getElementById('check_box_visual').style.background = check ? 'var(--success)' : 'transparent';
-        document.getElementById('campos_arresto').style.display = check ? 'block' : 'none';
-    }
-
-    function abrirResumen(tipo) {
-        currentTarget = tipo;
-        const container = document.getElementById('edit-fields-container');
-        const fiscalVal = document.getElementById('fiscal_responsable').value === "OTROS" ? document.getElementById('fiscal_otros').value : document.getElementById('fiscal_responsable').value;
-        
-        container.innerHTML = `
-            <div class="field-group"><label>Fiscalía</label><input type="text" id="edit_num_fiscalia" value="${document.getElementById('num_fiscalia').value}"></div>
-            <div class="field-group"><label>Fiscal Resp.</label><input type="text" id="edit_fiscal_responsable" value="${fiscalVal.toUpperCase()}"></div>
-            <div class="field-group"><label>Delito</label><input type="text" id="edit_delito" value="${document.getElementById('delito').value.toUpperCase()}"></div>
-            <div class="field-group"><label>Lugar</label><input type="text" id="edit_lugar_intervencion" value="${document.getElementById('lugar_intervencion').value.toUpperCase()}"></div>
-        `;
-        document.getElementById('modalResumen').style.display = 'flex';
-        document.getElementById('btnFinalizarDescarga').onclick = ejecutarConAnimacion;
-    }
-
-    function cerrarResumen() { document.getElementById('modalResumen').style.display = 'none'; }
-
-    async function ejecutarConAnimacion() {
-        cerrarResumen();
-        const overlay = document.getElementById('loader-overlay');
-        const status = document.getElementById('loader-status');
-        const bar = document.getElementById('progress-bar');
-        const link = document.getElementById('link-verificacion');
-        link.style.display = 'none';
-        overlay.style.display = 'flex';
-        
-        const mensajes = [
-            { t: "Iniciando procesador...", p: 20 },
-            { t: currentTarget === 'excel' ? "Generando Excel..." : "Generando Word...", p: 50 },
-            { t: "Validando plantillas...", p: 80 },
-            { t: "Gracias por usar el generador", p: 100 }
-        ];
-
-        for (const m of mensajes) {
-            status.innerText = m.t;
-            bar.style.width = m.p + "%";
-            await new Promise(r => setTimeout(r, 600));
-        }
-
-        if (currentTarget === 'acta') await descargarWord('MODELO_DOS.docx', 'RECEPCION');
-        if (currentTarget === 'tabla') await descargarWord('MODELO_WORD_TABLA.docx', 'TABLA');
-        if (currentTarget === 'excel') await descargarExcel();
-
-        setTimeout(() => { overlay.style.display = 'none'; bar.style.width = "0%"; }, 500);
-    }
-
-    function obtenerDataFinal() {
-        const n = document.querySelectorAll('.detenido_nombre');
-        const d = document.querySelectorAll('.detenido_dni');
-        const e = document.querySelectorAll('.detenido_edad');
-        let lista = [];
-        n.forEach((input, i) => {
-            if(input.value.trim()) {
-                lista.push({ num: i+1, nombre: input.value.toUpperCase(), dni: d[i].value || "---", edad: e[i].value || "---" });
-            }
+    try {
+        await fetch(URL_SCRIPT, {
+            method: "POST", mode: "no-cors",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data)
         });
 
-        const an = document.querySelectorAll('.agraviado_nombre');
-        const ad = document.querySelectorAll('.agraviado_dni');
-        const ae = document.querySelectorAll('.agraviado_edad');
-        let lista_agraviados = [];
-        an.forEach((input, i) => {
-            if(input.value.trim()) {
-                lista_agraviados.push({ 
-                    num: i+1, 
-                    nombre_agraviado: input.value.toUpperCase(), 
-                    dni_agraviado: ad[i].value || "---", 
-                    edad_agraviado: ae[i].value || "---" 
-                });
-            }
-        });
+        bar.style.width = "100%";
+        status.innerHTML = "✅ ¡INFORMACIÓN SUBIDA EXITOSAMENTE!";
+        link.style.display = 'block';
 
-        const fiscalFinal = document.getElementById('fiscal_responsable').value === "OTROS" ? document.getElementById('fiscal_otros').value : document.getElementById('fiscal_responsable').value;
+        // ── GUARDAR EN HISTORIAL LOCAL ──
+        guardarEnHistorial(data);
 
-        return {
-            HORA: document.getElementById('hora_acta').value,
-            FECHA: document.getElementById('fecha_acta').value,
-            NUMERO_FISCALIA: document.getElementById('num_fiscalia').value,
-            FISCAL_RESPONSABLE: fiscalFinal.toUpperCase(),
-            NOMBRE_PNP: document.getElementById('nombre_pnp').value.toUpperCase(),
-            DNI_PNP: document.getElementById('dni_pnp').value,
-            CELULAR_PNP: document.getElementById('celular_pnp').value,
-            UNIDAD_PNP: document.getElementById('unidad_pnp').value === "OTROS" ? document.getElementById('unidad_pnp_otros').value.toUpperCase() : document.getElementById('unidad_pnp').value,
-            DELITO: document.getElementById('delito').value.toUpperCase(),
-            LUGAR_INTERVENCION: document.getElementById('lugar_intervencion').value.toUpperCase(),
-            lista_detenidos: lista,
-            lista_agraviados: lista_agraviados,
-            NOMBRE_AGRAVIADO: lista_agraviados.length > 0 ? lista_agraviados[0].nombre_agraviado : "---",
-            HORA_INTERVENCION: document.getElementById('hora_intervencion').value,
-            es_arresto_ciudadano: document.getElementById('check_arresto').checked,
-            NOMBRE_CIUDADANO: document.getElementById('nombre_ciudadano').value.toUpperCase(),
-            DNI_CIUDADANO: document.getElementById('dni_ciudadano').value,
-            TIPO_FLAGRANCIA: document.getElementById('tipo_flagrancia').value,
-            HORA_CIERRE: document.getElementById('hora_cierre').value
-        };
-    }
-
-    async function descargarWord(plantilla, prefijo) {
-        const data = obtenerDataFinal();
-        try {
-            const resp = await fetch(plantilla);
-            const content = await resp.arrayBuffer();
-            const zip = new PizZip(content);
-            const doc = new window.docxtemplater(zip, { paragraphLoop: true, linebreaks: true });
-            doc.render(data);
-            // Forzar MIME type correcto para que móviles no guarden el archivo como .zip
-            const blob = doc.getZip().generate({
-                type: "blob",
-                mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-            });
-            const nombreBase = (data.lista_detenidos[0]?.nombre || 'DOC')
-                .replace(/[^A-Z0-9 _\-]/gi, '_').substring(0, 40);
-            const nombreArchivo = prefijo + '_' + nombreBase + '.docx';
-            // Descarga programática con enlace: más fiable en iOS/Android
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = nombreArchivo;
-            document.body.appendChild(a);
-            a.click();
-            setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 3000);
-        } catch (e) { alert("Error con la plantilla Word."); }
-    }
-
-    async function descargarExcel() {
-        const data = obtenerDataFinal();
-        const nombreArchivoModelo = "EXCEL_UNO.xlsx"; 
-
-        if (data.lista_detenidos.length === 0) {
-            alert("No hay detenidos para agregar.");
-            return;
-        }
-
-        try {
-            const respuesta = await fetch(nombreArchivoModelo);
-            if (!respuesta.ok) throw new Error();
-            const arrayBuffer = await respuesta.arrayBuffer();
-            const workbook = XLSX.read(arrayBuffer, { type: 'array' });
-            const nombreHoja = workbook.SheetNames[0];
-            const worksheet = workbook.Sheets[nombreHoja];
-
-            let contenidoExistente = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-            const encabezado = contenidoExistente.slice(0, 1);
-            const datosHistoricos = contenidoExistente.slice(1);
-
-            const nuevasFilas = data.lista_detenidos.map(det => {
-                const fiscalLimpio = data.FISCAL_RESPONSABLE.replace(/DR\.|DRA\./g, "").trim().toUpperCase();
-                return [
-                    fiscalLimpio,
-                    data.FECHA,
-                    data.HORA_INTERVENCION,
-                    data.LUGAR_INTERVENCION,
-                    data.UNIDAD_PNP,
-                    data.NOMBRE_PNP,
-                    data.DNI_PNP,
-                    det.nombre.toUpperCase(),
-                    det.dni,
-                    det.edad,
-                    data.lista_detenidos.length,
-                    data.DELITO.toUpperCase(),
-                    "", "", "", "",
-                    data.NOMBRE_AGRAVIADO.toUpperCase()
-                ];
-            });
-
-            const resultadoFinal = encabezado.concat(nuevasFilas, datosHistoricos);
-            const nuevaWs = XLSX.utils.aoa_to_sheet(resultadoFinal);
-            workbook.Sheets[nombreHoja] = nuevaWs;
-
-            const hoy = new Date();
-            XLSX.writeFile(workbook, `TURNO_ACTUALIZADO_${hoy.getDate()}_${hoy.getMonth() + 1}.xlsx`);
-
-        } catch (error) {
-            alert("Error: Asegúrate de que 'EXCEL_UNO.xlsx' esté en la misma carpeta.");
-        }
-    }
-
-    async function enviarAGoogleSheets() {
-        const data = obtenerDataFinal();
-        const URL_SCRIPT = "https://script.google.com/macros/s/AKfycby8t6iFeMPQv4im1pqb3AteXY6mbeV-EsDK3g9_6-inszyrB5jkPYjTIbjK_A7K0BtX/exec";
-
-        if (data.lista_detenidos.length === 0) {
-            alert("⚠️ No hay detenidos para registrar.");
-            return;
-        }
-
-        const overlay = document.getElementById('loader-overlay');
-        const status = document.getElementById('loader-status');
-        const bar = document.getElementById('progress-bar');
-        const link = document.getElementById('link-verificacion');
-        
-        link.style.display = 'none';
-        overlay.style.display = 'flex';
-        status.innerText = "CONECTANDO CON LA NUBE...";
-        bar.style.width = "30%";
-
-        try {
-            await fetch(URL_SCRIPT, {
-                method: "POST",
-                mode: "no-cors",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(data)
-            });
-
-            bar.style.width = "100%";
-            status.innerHTML = "✅ ¡INFORMACIÓN SUBIDA EXITOSAMENTE!";
-            link.style.display = 'block';
-            
-            setTimeout(() => {
-                overlay.style.display = 'none';
-                bar.style.width = "0%";
-                link.style.display = 'none';
-            }, 6000);
-
-        } catch (error) {
+        setTimeout(() => {
             overlay.style.display = 'none';
-            alert("❌ Error al subir a Google Sheets.");
-        }
+            bar.style.width = "0%";
+            link.style.display = 'none';
+        }, 6000);
+
+    } catch (error) {
+        overlay.style.display = 'none';
+        alert("❌ Error al subir a Google Sheets.");
     }
+}
+
+/* ══════════════════════════════════════════
+   HISTORIAL - LÓGICA
+══════════════════════════════════════════ */
+function cargarHistorial() {
+    try { return JSON.parse(localStorage.getItem(HIST_KEY)) || []; }
+    catch { return []; }
+}
+function guardarHistorialLS(hist) {
+    localStorage.setItem(HIST_KEY, JSON.stringify(hist));
+}
+function guardarEnHistorial(data) {
+    const hist = cargarHistorial();
+    const registro = {
+        id: Date.now(),
+        timestamp: new Date().toLocaleString('es-PE'),
+        ...data
+    };
+    hist.unshift(registro); // más reciente primero
+    if (hist.length > MAX_HIST) hist.length = MAX_HIST;
+    guardarHistorialLS(hist);
+    actualizarBadge();
+}
+function actualizarBadge() {
+    const hist = cargarHistorial();
+    document.getElementById('hist-badge-count').textContent = hist.length;
+}
+function abrirHistorial() {
+    renderHistorial();
+    document.getElementById('modalHistorial').style.display = 'flex';
+}
+function cerrarHistorial() { document.getElementById('modalHistorial').style.display = 'none'; }
+
+function renderHistorial() {
+    const hist    = cargarHistorial();
+    const query   = (document.getElementById('hist-search-input')?.value || '').toUpperCase().trim();
+    const container = document.getElementById('hist-body-container');
+    const countLabel = document.getElementById('hist-count-label');
+
+    let filtrados = hist;
+    if (query) {
+        filtrados = hist.filter(r => {
+            const blob = [
+                r.DELITO, r.NOMBRE_PNP, r.UNIDAD_PNP, r.FISCAL_RESPONSABLE,
+                r.LUGAR_INTERVENCION, r.FECHA,
+                ...(r.lista_detenidos||[]).map(d => d.nombre + ' ' + d.dni),
+                ...(r.lista_agraviados||[]).map(a => a.nombre_agraviado)
+            ].join(' ').toUpperCase();
+            return blob.includes(query);
+        });
+    }
+
+    countLabel.textContent = `${filtrados.length} registro${filtrados.length !== 1 ? 's' : ''}`;
+
+    if (!filtrados.length) {
+        container.innerHTML = `<div class="hist-empty"><span>${query ? '🔍' : '📂'}</span>${query ? 'Sin resultados para "' + query + '"' : 'No hay registros aún.<br>Los datos enviados al servidor aparecerán aquí.'}</div>`;
+        return;
+    }
+
+    container.innerHTML = filtrados.map((r, idx) => buildHistCard(r, idx)).join('');
+}
+
+function buildHistCard(r, idx) {
+    const primerDet = r.lista_detenidos?.[0]?.nombre || 'SIN NOMBRE';
+    const nDet = r.lista_detenidos?.length || 0;
+    const nAgr = r.lista_agraviados?.length || 0;
+    const cardId = `hc_${r.id}`;
+
+    // Campos generales
+    const camposGenerales = [
+        { l: "Fiscalía N°",       v: r.NUMERO_FISCALIA },
+        { l: "Fiscal",            v: r.FISCAL_RESPONSABLE },
+        { l: "Fecha",             v: r.FECHA },
+        { l: "Hora llamada",      v: r.HORA },
+        { l: "Hora intervención", v: r.HORA_INTERVENCION },
+        { l: "Hora cierre",       v: r.HORA_CIERRE },
+        { l: "Delito",            v: r.DELITO },
+        { l: "Lugar",             v: r.LUGAR_INTERVENCION },
+        { l: "Unidad PNP",        v: r.UNIDAD_PNP },
+        { l: "Nombre PNP",        v: r.NOMBRE_PNP },
+        { l: "DNI PNP",           v: r.DNI_PNP },
+        { l: "Celular PNP",       v: r.CELULAR_PNP },
+        { l: "Arresto ciudadano", v: r.es_arresto_ciudadano ? 'SÍ' : 'NO' },
+    ];
+    if (r.es_arresto_ciudadano) {
+        camposGenerales.push(
+            { l: "Ciudadano",   v: r.NOMBRE_CIUDADANO },
+            { l: "DNI ciudadano", v: r.DNI_CIUDADANO },
+            { l: "Flagrancia",  v: r.TIPO_FLAGRANCIA }
+        );
+    }
+
+    const detenidosHTML = (r.lista_detenidos||[]).map(d => `
+        <div class="det-person">
+            <div class="person-name">👤 ${d.nombre}</div>
+            <div class="person-chips">
+                <span class="person-chip" onclick="copiarAlPortapapeles('${d.nombre}')">📋 ${d.nombre}</span>
+                <span class="person-chip" onclick="copiarAlPortapapeles('${d.dni}')">🪪 DNI: ${d.dni}</span>
+                <span class="person-chip" onclick="copiarAlPortapapeles('${d.edad}')">🎂 ${d.edad} años</span>
+            </div>
+        </div>`).join('');
+
+    const agraviadosHTML = (r.lista_agraviados||[]).map(a => `
+        <div class="det-person agrav-person">
+            <div class="person-name">🧑‍⚖️ ${a.nombre_agraviado}</div>
+            <div class="person-chips">
+                <span class="person-chip" onclick="copiarAlPortapapeles('${a.nombre_agraviado}')">📋 ${a.nombre_agraviado}</span>
+                <span class="person-chip" onclick="copiarAlPortapapeles('${a.dni_agraviado}')">🪪 DNI: ${a.dni_agraviado}</span>
+                <span class="person-chip" onclick="copiarAlPortapapeles('${a.edad_agraviado}')">🎂 ${a.edad_agraviado} años</span>
+            </div>
+        </div>`).join('');
+
+    const resumenCompleto = [
+        `FECHA: ${r.FECHA}`, `HORA INTERVENCIÓN: ${r.HORA_INTERVENCION}`,
+        `FISCAL: ${r.FISCAL_RESPONSABLE}`, `FISCALÍA: ${r.NUMERO_FISCALIA}`,
+        `DELITO: ${r.DELITO}`, `LUGAR: ${r.LUGAR_INTERVENCION}`,
+        `UNIDAD PNP: ${r.UNIDAD_PNP}`, `EFECTIVO PNP: ${r.NOMBRE_PNP} / DNI: ${r.DNI_PNP}`,
+        ...(r.lista_detenidos||[]).map((d,i) => `DETENIDO ${i+1}: ${d.nombre} / DNI: ${d.dni} / EDAD: ${d.edad}`),
+        ...(r.lista_agraviados||[]).map((a,i) => `AGRAVIADO ${i+1}: ${a.nombre_agraviado} / DNI: ${a.dni_agraviado} / EDAD: ${a.edad_agraviado}`),
+        `HORA CIERRE: ${r.HORA_CIERRE}`,
+        `ARRESTO CIUDADANO: ${r.es_arresto_ciudadano ? 'SÍ' : 'NO'}`
+    ].join('\n');
+
+    return `
+    <div class="hist-card" id="${cardId}">
+        <div class="hist-card-header" onclick="toggleHistCard('${cardId}')">
+            <div class="hist-card-meta">
+                <div class="hist-card-title">${primerDet}${nDet > 1 ? ` +${nDet-1} más` : ''}</div>
+                <div class="hist-card-sub">📅 ${r.timestamp} &nbsp;·&nbsp; 📍 ${r.LUGAR_INTERVENCION||'—'}</div>
+            </div>
+            <div class="hist-card-badges">
+                <span class="badge badge-delito" title="${r.DELITO}">${r.DELITO||'—'}</span>
+                <span class="badge badge-n">${nDet} det.</span>
+                <span class="hist-chevron" id="chev_${cardId}">▼</span>
+            </div>
+        </div>
+
+        <div class="hist-card-detail" id="detail_${cardId}">
+            <div class="detail-section">
+                <div class="detail-section-title">🏛️ Datos del Acta</div>
+                <div class="detail-grid">
+                    ${camposGenerales.filter(c => c.v).map(c => `
+                        <div class="detail-field" onclick="copiarAlPortapapeles('${(c.v+'').replace(/'/g,"\\'")}')">
+                            <div class="df-label">${c.l}</div>
+                            <div class="df-value">${c.v}</div>
+                        </div>`).join('')}
+                </div>
+            </div>
+
+            ${nDet > 0 ? `
+            <div class="detail-section">
+                <div class="detail-section-title">👤 Detenidos (${nDet})</div>
+                ${detenidosHTML}
+            </div>` : ''}
+
+            ${nAgr > 0 ? `
+            <div class="detail-section">
+                <div class="detail-section-title" style="color:var(--warn);">🧑‍⚖️ Agraviados (${nAgr})</div>
+                ${agraviadosHTML}
+            </div>` : ''}
+        </div>
+
+        <div class="hist-card-actions" id="actions_${cardId}" style="display:none;">
+            <button class="btn-hist-action btn-copy-all" onclick="copiarAlPortapapeles(\`${resumenCompleto.replace(/`/g,'\\`')}\`, true)">📋 COPIAR TODO</button>
+            <button class="btn-hist-action btn-delete"   onclick="eliminarRegistroHistorial(${r.id})">🗑 ELIMINAR</button>
+        </div>
+    </div>`;
+}
+
+function toggleHistCard(cardId) {
+    const detail  = document.getElementById('detail_' + cardId);
+    const chev    = document.getElementById('chev_'   + cardId);
+    const actions = document.getElementById('actions_' + cardId);
+    const open    = detail.classList.toggle('open');
+    chev.classList.toggle('open', open);
+    actions.style.display = open ? 'flex' : 'none';
+}
+
+function eliminarRegistroHistorial(id) {
+    if (!confirm('¿Eliminar este registro del historial?')) return;
+    let hist = cargarHistorial();
+    hist = hist.filter(r => r.id !== id);
+    guardarHistorialLS(hist);
+    actualizarBadge();
+    renderHistorial();
+}
+
+function limpiarTodoHistorial() {
+    if (!confirm('¿Eliminar TODO el historial? Esta acción no se puede deshacer.')) return;
+    localStorage.removeItem(HIST_KEY);
+    actualizarBadge();
+    renderHistorial();
+}
+
+/* ══════════════════════════════════════════
+   COPIAR AL PORTAPAPELES
+══════════════════════════════════════════ */
+function copiarAlPortapapeles(texto, esCompleto = false) {
+    navigator.clipboard.writeText(texto).then(() => {
+        mostrarToast(esCompleto ? '✅ Resumen completo copiado' : '✅ Copiado: ' + texto.substring(0, 30) + (texto.length > 30 ? '…' : ''));
+    }).catch(() => {
+        const ta = document.createElement('textarea');
+        ta.value = texto;
+        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove();
+        mostrarToast('✅ Copiado');
+    });
+}
+function mostrarToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+}
 </script>
 </body>
 </html>
