@@ -265,12 +265,11 @@
         <div class="section-title">🏁 6. Cierre</div>
         <div class="field-group"><label>Hora de Cierre del Acta</label><input type="time" id="hora_cierre"></div>
 
-        <!-- ── BOTONES REORGANIZADOS ── -->
+        <!-- ── BOTONES ── -->
         <div class="download-grid">
-            <button type="button" class="btn-dl btn-acta"   onclick="abrirResumen('acta')">📄 DESCARGAR ACTA WORD</button>
-            <button type="button" class="btn-dl btn-tabla"  onclick="abrirResumen('tabla')">📋 DESCARGAR TABLA RESUMEN</button>
+            <button type="button" class="btn-dl btn-acta"    onclick="abrirResumen('acta')">📄 DESCARGAR ACTA WORD</button>
+            <button type="button" class="btn-dl btn-tabla"   onclick="abrirResumen('tabla')">📋 DESCARGAR TABLA RESUMEN</button>
             <button type="button" class="btn-dl btn-gsheets" onclick="abrirConfirmacionSheets()">☁️ SUBIR DATOS AL SERVIDOR</button>
-            <button type="button" class="btn-dl btn-excel"  onclick="abrirResumen('excel')">📊 DESCARGAR EXCEL LOCAL</button>
         </div>
     </form>
 </div>
@@ -614,8 +613,22 @@
             const zip = new PizZip(content);
             const doc = new window.docxtemplater(zip, { paragraphLoop: true, linebreaks: true });
             doc.render(data);
-            const out = doc.getZip().generate({ type: "blob" });
-            saveAs(out, `${prefijo}_${data.lista_detenidos[0]?.nombre || 'DOC'}.docx`);
+            // Forzar MIME type correcto para que móviles no guarden el archivo como .zip
+            const blob = doc.getZip().generate({
+                type: "blob",
+                mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+            });
+            const nombreBase = (data.lista_detenidos[0]?.nombre || 'DOC')
+                .replace(/[^A-Z0-9 _\-]/gi, '_').substring(0, 40);
+            const nombreArchivo = prefijo + '_' + nombreBase + '.docx';
+            // Descarga programática con enlace: más fiable en iOS/Android
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = nombreArchivo;
+            document.body.appendChild(a);
+            a.click();
+            setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 3000);
         } catch (e) { alert("Error con la plantilla Word."); }
     }
 
@@ -674,7 +687,7 @@
 
     async function enviarAGoogleSheets() {
         const data = obtenerDataFinal();
-        const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbzOzTUSOfafoweMEff_aisETfBA4so51SbmtQpZfPsYo2HJn09vkt02Uo2VHpPOO4VM/exec";
+        const URL_SCRIPT = "https://script.google.com/macros/s/AKfycby8t6iFeMPQv4im1pqb3AteXY6mbeV-EsDK3g9_6-inszyrB5jkPYjTIbjK_A7K0BtX/exec";
 
         if (data.lista_detenidos.length === 0) {
             alert("⚠️ No hay detenidos para registrar.");
