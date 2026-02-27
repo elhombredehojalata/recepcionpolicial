@@ -24,6 +24,7 @@
             --danger: #ef4444; 
             --excel: #16a34a; 
             --word: #2563eb;
+            --gsheets: #0f9d58;
         }
 
         * { box-sizing: border-box; transition: all 0.2s ease; }
@@ -44,6 +45,7 @@
         .btn-acta { background: var(--word); }
         .btn-tabla { background: #4f46e5; }
         .btn-excel { background: var(--excel); }
+        .btn-gsheets { background: var(--gsheets); }
         #loader-overlay { display: none; position: fixed; inset: 0; background: rgba(2, 6, 23, 0.95); z-index: 9999; flex-direction: column; align-items: center; justify-content: center; }
         .loader-box { width: 320px; text-align: center; }
         .loader-text { margin-bottom: 20px; font-weight: 700; color: var(--primary); min-height: 1.2em; text-transform: uppercase; letter-spacing: 1px; }
@@ -55,6 +57,7 @@
         .btn-remove { position: absolute; top: -10px; right: -10px; background: var(--danger); color: white; border: none; border-radius: 50%; width: 25px; height: 25px; cursor: pointer; z-index: 10; }
         .option-card { background: #0f172a; border: 2px solid var(--border); padding: 15px; border-radius: 15px; margin: 20px 0; display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
         .option-card.active { border-color: var(--success); background: rgba(16, 185, 129, 0.05); }
+        #link-verificacion { color: var(--primary); text-decoration: underline; font-weight: bold; cursor: pointer; display: block; margin-top: 15px; font-size: 0.8rem; }
     </style>
 </head>
 <body>
@@ -65,6 +68,7 @@
         <div class="progress-container">
             <div class="progress-bar" id="progress-bar"></div>
         </div>
+        <a id="link-verificacion" style="display:none;" href="https://docs.google.com/spreadsheets/d/1fIMj_PktWRt_OPkVGwbePXRLiUnKnjDV7CA0MfskQe8/edit?gid=0#gid=0" target="_blank">VERIFICAR EN HOJA DE CÁLCULO 🔗</a>
     </div>
 </div>
 
@@ -218,6 +222,7 @@
         <div class="field-group"><label>Hora de Cierre del Acta</label><input type="time" id="hora_cierre"></div>
 
         <div class="download-grid">
+            <button type="button" class="btn-dl btn-gsheets" onclick="enviarAGoogleSheets()">☁️ SUBIR A GOOGLE SHEETS</button>
             <button type="button" class="btn-dl btn-acta" onclick="abrirResumen('acta')">📄 ACTA PRINCIPAL (WORD)</button>
             <button type="button" class="btn-dl btn-tabla" onclick="abrirResumen('tabla')">📋 TABLA DETENIDOS (WORD)</button>
             <button type="button" class="btn-dl btn-excel" onclick="abrirResumen('excel')">📊 REPORTE EXCEL (MODELO)</button>
@@ -264,7 +269,6 @@
         document.getElementById('contenedor_detenidos').appendChild(div);
     }
 
-    // NUEVA FUNCION PARA AGREGAR AGRAVIADOS
     function agregarAgraviado() {
         const id = Date.now();
         const div = document.createElement('div');
@@ -303,6 +307,8 @@
         const overlay = document.getElementById('loader-overlay');
         const status = document.getElementById('loader-status');
         const bar = document.getElementById('progress-bar');
+        const link = document.getElementById('link-verificacion');
+        link.style.display = 'none';
         overlay.style.display = 'flex';
         
         const mensajes = [
@@ -326,7 +332,6 @@
     }
 
     function obtenerDataFinal() {
-        // Capturar Detenidos
         const n = document.querySelectorAll('.detenido_nombre');
         const d = document.querySelectorAll('.detenido_dni');
         const e = document.querySelectorAll('.detenido_edad');
@@ -337,7 +342,6 @@
             }
         });
 
-        // Capturar Agraviados (NUEVO)
         const an = document.querySelectorAll('.agraviado_nombre');
         const ad = document.querySelectorAll('.agraviado_dni');
         const ae = document.querySelectorAll('.agraviado_edad');
@@ -367,8 +371,8 @@
             DELITO: document.getElementById('delito').value.toUpperCase(),
             LUGAR_INTERVENCION: document.getElementById('lugar_intervencion').value.toUpperCase(),
             lista_detenidos: lista,
-            lista_agraviados: lista_agraviados, // SE ENVÍA LA LISTA AL WORD
-            NOMBRE_AGRAVIADO: lista_agraviados.length > 0 ? lista_agraviados[0].nombre_agraviado : "---", // Para el Excel enviamos el primero
+            lista_agraviados: lista_agraviados,
+            NOMBRE_AGRAVIADO: lista_agraviados.length > 0 ? lista_agraviados[0].nombre_agraviado : "---",
             HORA_INTERVENCION: document.getElementById('hora_intervencion').value,
             es_arresto_ciudadano: document.getElementById('check_arresto').checked,
             NOMBRE_CIUDADANO: document.getElementById('nombre_ciudadano').value.toUpperCase(),
@@ -441,6 +445,50 @@
 
         } catch (error) {
             alert("Error: Asegúrate de que 'EXCEL_UNO.xlsx' esté en la misma carpeta.");
+        }
+    }
+
+    async function enviarAGoogleSheets() {
+        const data = obtenerDataFinal();
+        const URL_SCRIPT = "https://script.google.com/macros/s/AKfycby8t6iFeMPQv4im1pqb3AteXY6mbeV-EsDK3g9_6-inszyrB5jkPYjTIbjK_A7K0BtX/exec";
+
+        if (data.lista_detenidos.length === 0) {
+            alert("⚠️ No hay detenidos para registrar.");
+            return;
+        }
+
+        const overlay = document.getElementById('loader-overlay');
+        const status = document.getElementById('loader-status');
+        const bar = document.getElementById('progress-bar');
+        const link = document.getElementById('link-verificacion');
+        
+        link.style.display = 'none';
+        overlay.style.display = 'flex';
+        status.innerText = "CONECTANDO CON LA NUBE...";
+        bar.style.width = "30%";
+
+        try {
+            await fetch(URL_SCRIPT, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data)
+            });
+
+            bar.style.width = "100%";
+            status.innerHTML = "✅ ¡INFORMACIÓN SUBIDA EXITOSAMENTE!";
+            link.style.display = 'block';
+            
+            // Mantenemos el mensaje visible 4 segundos antes de cerrar automáticamente
+            setTimeout(() => {
+                overlay.style.display = 'none';
+                bar.style.width = "0%";
+                link.style.display = 'none';
+            }, 6000);
+
+        } catch (error) {
+            overlay.style.display = 'none';
+            alert("❌ Error al subir a Google Sheets.");
         }
     }
 </script>
