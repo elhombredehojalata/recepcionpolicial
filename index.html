@@ -195,6 +195,61 @@
         .hist-count { font-size: 0.75rem; color: var(--label); font-weight: 700; white-space: nowrap; }
         .btn-clear-all { padding: 8px 14px; border-radius: 8px; background: rgba(239,68,68,0.1); color: #fca5a5; border: 1px solid rgba(239,68,68,0.25); cursor: pointer; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; }
         .btn-clear-all:hover { background: rgba(239,68,68,0.2); }
+
+        /* ── BOTÓN DONACIÓN ── */
+        #btn-donar {
+            position: fixed;
+            bottom: 24px;
+            left: 24px;
+            z-index: 4000;
+            background: rgba(30, 41, 59, 0.92);
+            border: 1px solid #f59e0b;
+            color: #f59e0b;
+            border-radius: 50px;
+            padding: 8px 15px;
+            font-size: 0.68rem;
+            font-weight: 800;
+            cursor: pointer;
+            opacity: 0.55;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            letter-spacing: 0.3px;
+            backdrop-filter: blur(4px);
+            box-shadow: 0 4px 15px rgba(245,158,11,0.15);
+        }
+        #btn-donar:hover { opacity: 1; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(245,158,11,0.3); }
+        /* Modal donación */
+        #modalDonar .modal-content { max-width: 380px; text-align: center; padding: 36px 30px; }
+        .donar-icon { font-size: 2.5rem; margin-bottom: 10px; }
+        .donar-titulo { font-size: 1rem; font-weight: 800; color: #f59e0b; margin-bottom: 6px; }
+        .donar-desc { font-size: 0.82rem; color: var(--label); line-height: 1.6; margin-bottom: 20px; }
+        .yape-box {
+            background: #0f172a;
+            border: 2px solid #f59e0b;
+            border-radius: 14px;
+            padding: 18px;
+            margin-bottom: 16px;
+            position: relative;
+        }
+        .yape-label { font-size: 0.65rem; font-weight: 800; color: var(--label); text-transform: uppercase; margin-bottom: 6px; }
+        .yape-numero { font-size: 1.6rem; font-weight: 800; color: #f59e0b; letter-spacing: 3px; }
+        .yape-nombre { font-size: 0.78rem; color: var(--label); margin-top: 4px; }
+        .btn-copiar-yape {
+            background: #f59e0b;
+            color: #0f172a;
+            border: none;
+            border-radius: 10px;
+            padding: 12px 24px;
+            font-weight: 800;
+            font-size: 0.85rem;
+            cursor: pointer;
+            width: 100%;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .btn-copiar-yape:hover { background: #fbbf24; }
+        .donar-footer { font-size: 0.7rem; color: var(--label); margin-top: 14px; opacity: 0.7; }
     </style>
 </head>
 <body>
@@ -212,6 +267,29 @@
 
 <!-- TOAST -->
 <div id="toast">✅ Copiado al portapapeles</div>
+
+
+<!-- BOTÓN DONACIÓN -->
+<button id="btn-donar" onclick="abrirModalDonar()">
+    💛 DONAR
+</button>
+
+<!-- MODAL DONACIÓN -->
+<div id="modalDonar" class="modal">
+    <div class="modal-content">
+        <div class="donar-icon">💛</div>
+        <div class="donar-titulo">¡Apoya el Proyecto!</div>
+        <div class="donar-desc">Gracias por usar el sistema del laboratorio de RH's patología UNP.<br>Si deseas que el proyecto crezca, puedes donar por Yape:</div>
+        <div class="yape-box">
+            <div class="yape-label">Número Yape</div>
+            <div class="yape-numero">945 149 037</div>
+            <div class="yape-nombre">Angel Oliden</div>
+        </div>
+        <button class="btn-copiar-yape" onclick="copiarYape()">📋 COPIAR NÚMERO</button>
+        <div class="donar-footer">Cada aporte, por pequeño que sea, hace la diferencia 🙏</div>
+        <button onclick="document.getElementById('modalDonar').style.display='none'" style="margin-top:14px; background:transparent; border:1px solid var(--border); color:var(--label); padding:8px 20px; border-radius:8px; cursor:pointer; font-size:0.78rem; font-weight:700;">CERRAR</button>
+    </div>
+</div>
 
 <!-- BOTÓN FLOTANTE HISTORIAL -->
 <button id="btn-historial-flotante" onclick="abrirHistorial()">
@@ -977,6 +1055,13 @@ function mostrarToast(msg) {
     const t = document.getElementById('toast');
     t.textContent = msg; t.classList.add('show');
     setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+/* ── DONACIÓN ── */
+function abrirModalDonar() { document.getElementById('modalDonar').style.display = 'flex'; }
+function copiarYape() {
+    copiarAlPortapapeles('945149037', false);
+    mostrarToast('✅ Número Yape copiado: 945149037');
 }
 </script>
 </body>
