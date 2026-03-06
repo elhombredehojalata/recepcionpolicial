@@ -150,6 +150,33 @@
         .btn-copiar-yape { background: #f59e0b; color: #0f172a; border: none; border-radius: 10px; padding: 12px 24px; font-weight: 800; font-size: 0.85rem; cursor: pointer; width: 100%; text-transform: uppercase; letter-spacing: 0.5px; }
         .btn-copiar-yape:hover { background: #fbbf24; }
         .donar-footer { font-size: 0.7rem; color: var(--label); margin-top: 14px; opacity: 0.7; }
+
+        /* ── BOTÓN CONSULTAR SERVIDOR ── */
+        #btn-consultar-servidor {
+            position: fixed;
+            bottom: 80px;
+            right: 24px;
+            z-index: 4000;
+            background: linear-gradient(135deg, #065f46, #10b981);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 12px 20px;
+            font-weight: 800;
+            font-size: 0.8rem;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(16,185,129,0.35);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            text-decoration: none;
+        }
+        #btn-consultar-servidor:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(16,185,129,0.5);
+        }
     </style>
 </head>
 <body>
@@ -168,6 +195,13 @@
 
 <!-- BOTÓN DONACIÓN -->
 <button id="btn-donar" onclick="abrirModalDonar()">💛 DONAR</button>
+
+<!-- BOTÓN CONSULTAR SERVIDOR ← NUEVO -->
+<a id="btn-consultar-servidor"
+   href="https://docs.google.com/spreadsheets/d/1fIMj_PktWRt_OPkVGwbePXRLiUnKnjDV7CA0MfskQe8/edit?gid=0#gid=0"
+   target="_blank">
+    📊 CONSULTAR DATOS
+</a>
 
 <!-- MODAL DONACIÓN -->
 <div id="modalDonar" class="modal">
@@ -194,13 +228,12 @@
 <!-- FORMULARIO -->
 <div class="app-container">
     <div class="header">
-        <h1>⚖️ Acta de recepción telefónica - V1.3.0 Angel Oliden</h1>
+        <h1>⚖️ Acta de recepción telefónica - V1.3.1 Angel Oliden</h1>
         <div class="subtitle">USO INTERNO - PROHIBIDA SU DIFUSIÓN</div>
     </div>
 
     <form id="docForm">
 
-        <!-- SECCIÓN 1: FISCALÍA -->
         <div class="section-title">🏛️ 1. Datos del Acta y Fiscalía</div>
         <div class="grid-3">
             <div class="field-group"><label>Hora Llamada</label><input type="time" id="hora_acta"></div>
@@ -226,7 +259,6 @@
             <input type="text" id="fiscal_otros" style="display:none; margin-top:10px;" placeholder="Escriba el nombre del Fiscal...">
         </div>
 
-        <!-- ── NUEVO: FISCAL ASIGNADO ── -->
         <div class="field-group">
             <label>Fiscal Asignado al caso</label>
             <select id="fiscal_asignado">
@@ -249,7 +281,6 @@
             </select>
         </div>
 
-        <!-- SECCIÓN 2: PNP -->
         <div class="section-title">👮 2. Datos de la Comunicación Policial</div>
         <div class="grid-3">
             <div class="field-group"><label>Celular PNP</label><input type="text" id="celular_pnp"></div>
@@ -302,7 +333,6 @@
             <input type="text" id="unidad_pnp_otros" style="display:none; margin-top:10px;" placeholder="Escriba el nombre de la Unidad...">
         </div>
 
-        <!-- SECCIÓN 3: DETENIDOS -->
         <div class="section-title">👤 3. Datos de los Detenidos</div>
         <div id="contenedor_detenidos">
             <div class="detenido-card">
@@ -315,7 +345,6 @@
         </div>
         <button type="button" class="btn-add" onclick="agregarDetenido()">➕ AGREGAR OTRO DETENIDO</button>
 
-        <!-- SECCIÓN 4: AGRAVIADOS -->
         <div class="section-title">👤 4. Datos de los Agraviados</div>
         <div id="contenedor_agraviados">
             <div class="detenido-card">
@@ -328,7 +357,6 @@
         </div>
         <button type="button" class="btn-add" onclick="agregarAgraviado()">➕ AGREGAR OTRO AGRAVIADO</button>
 
-        <!-- SECCIÓN 5: INTERVENCIÓN -->
         <div class="section-title">🚨 5. Detalles de la Intervención</div>
         <div class="grid-3">
             <div class="field-group">
@@ -361,7 +389,6 @@
             </div>
         </div>
 
-        <!-- SECCIÓN 6: CIERRE -->
         <div class="section-title">🏁 6. Cierre</div>
         <div class="field-group"><label>Hora de Cierre del Acta</label><input type="time" id="hora_cierre"></div>
 
@@ -482,7 +509,6 @@ window.onload = function() {
     actualizarBadge();
 };
 
-/* AUTOCOMPLETE */
 function filtrarDelitos() {
     const input = document.getElementById('delito');
     const lista = document.getElementById('lista_delitos');
@@ -515,7 +541,6 @@ function navSugerencias(e) {
     if (activeSugerencia >= 0) items[activeSugerencia].scrollIntoView({ block: 'nearest' });
 }
 
-/* FORMULARIO */
 function verificarUnidad() {
     document.getElementById('unidad_pnp_otros').style.display =
         document.getElementById('unidad_pnp').value === "OTROS" ? "block" : "none";
@@ -545,7 +570,6 @@ function toggleArrestoVisual() {
     document.getElementById('campos_arresto').style.display = check ? 'block' : 'none';
 }
 
-/* OBTENER DATA — incluye los 2 campos nuevos */
 function obtenerDataFinal() {
     const n = document.querySelectorAll('.detenido_nombre');
     const d = document.querySelectorAll('.detenido_dni');
@@ -569,9 +593,9 @@ function obtenerDataFinal() {
     return {
         HORA: document.getElementById('hora_acta').value,
         FECHA: document.getElementById('fecha_acta').value,
-        NUMERO_FISCALIA: document.getElementById('num_fiscalia').value,        // ← NUEVO (enviado al script)
+        NUMERO_FISCALIA: document.getElementById('num_fiscalia').value,
         FISCAL_RESPONSABLE: fiscalFinal.toUpperCase(),
-        FISCAL_ASIGNADO: document.getElementById('fiscal_asignado').value,     // ← NUEVO
+        FISCAL_ASIGNADO: document.getElementById('fiscal_asignado').value,
         NOMBRE_PNP: document.getElementById('nombre_pnp').value.toUpperCase(),
         DNI_PNP: document.getElementById('dni_pnp').value,
         CELULAR_PNP: document.getElementById('celular_pnp').value,
@@ -592,7 +616,6 @@ function obtenerDataFinal() {
     };
 }
 
-/* MODAL WORD */
 function abrirResumen(tipo) {
     currentTarget = tipo;
     const container = document.getElementById('edit-fields-container');
@@ -656,7 +679,6 @@ async function descargarWord(plantilla, prefijo) {
     } catch (e) { alert("Error con la plantilla Word."); }
 }
 
-/* MODAL CONFIRMACIÓN SHEETS */
 function abrirConfirmacionSheets() {
     const data = obtenerDataFinal();
     const body = document.getElementById('resumen-sheets-body');
@@ -695,7 +717,6 @@ function abrirConfirmacionSheets() {
 function cerrarModalSheets() { document.getElementById('modalConfirmarSheets').style.display = 'none'; }
 async function confirmarEnvioSheets() { cerrarModalSheets(); await enviarAGoogleSheets(); }
 
-/* ENVÍO */
 async function enviarAGoogleSheets() {
     const data = obtenerDataFinal();
     const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbzOzTUSOfafoweMEff_aisETfBA4so51SbmtQpZfPsYo2HJn09vkt02Uo2VHpPOO4VM/exec";
@@ -725,7 +746,6 @@ async function enviarAGoogleSheets() {
     }
 }
 
-/* HISTORIAL */
 function cargarHistorial() {
     try { return JSON.parse(localStorage.getItem(HIST_KEY)) || []; } catch { return []; }
 }
@@ -879,7 +899,6 @@ function limpiarTodoHistorial() {
     renderHistorial();
 }
 
-/* COPIAR */
 function copiarAlPortapapeles(texto, esCompleto = false) {
     navigator.clipboard.writeText(texto).then(() => {
         mostrarToast(esCompleto ? '✅ Resumen completo copiado' : '✅ Copiado: ' + texto.substring(0, 30) + (texto.length > 30 ? '…' : ''));
@@ -895,7 +914,6 @@ function mostrarToast(msg) {
     setTimeout(() => t.classList.remove('show'), 2500);
 }
 
-/* DONACIÓN */
 function abrirModalDonar() { document.getElementById('modalDonar').style.display = 'flex'; }
 function copiarYape() { copiarAlPortapapeles('945149037'); mostrarToast('✅ Número Yape copiado: 945149037'); }
 </script>
